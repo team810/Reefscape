@@ -1,5 +1,7 @@
 package frc.robot.IO;
 
+import javax.xml.transform.Source;
+
 public enum Controls {
     // Primary
     driveXVelocity,
@@ -14,6 +16,8 @@ public enum Controls {
 
     leftSource,
     rightSource,
+
+    robotRelative,
 
     AlgaeIntakeReefHigh,
     AlgaeIntakeReefLow,

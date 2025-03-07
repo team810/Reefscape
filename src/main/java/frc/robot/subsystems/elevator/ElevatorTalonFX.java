@@ -58,7 +58,7 @@ public class ElevatorTalonFX implements ElevatorIO{
 
         TalonFXConfiguration config = new TalonFXConfiguration();
         // Current config
-        config.CurrentLimits.SupplyCurrentLimit = 30;
+        config.CurrentLimits.SupplyCurrentLimit = 40;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.StatorCurrentLimit = 80;
@@ -83,6 +83,26 @@ public class ElevatorTalonFX implements ElevatorIO{
             config.Slot0.kP = 1;
             config.Slot0.kI = 0;
             config.Slot0.kD = 0;
+
+            config.Slot1.GravityType = GravityTypeValue.Elevator_Static;
+            config.Slot1.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
+            config.Slot1.kG = 1.1;
+            config.Slot1.kS = 0;
+            config.Slot1.kV = .125;
+            config.Slot1.kA = 0.01;
+            config.Slot1.kP = 1;
+            config.Slot1.kI = 0;
+            config.Slot1.kD = 0;
+
+            config.Slot2.GravityType = GravityTypeValue.Elevator_Static;
+            config.Slot2.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
+            config.Slot2.kG = 1.1;
+            config.Slot2.kS = 0;
+            config.Slot2.kV = .125;
+            config.Slot2.kA = 0.01;
+            config.Slot2.kP = 1;
+            config.Slot2.kI = 0;
+            config.Slot2.kD = 0;
 
             config.MotionMagic.MotionMagicCruiseVelocity = 20;
             config.MotionMagic.MotionMagicAcceleration = 100;
@@ -225,9 +245,9 @@ public class ElevatorTalonFX implements ElevatorIO{
             control.Jerk = 500;
         }else{
             // Moving up
-            control.Velocity = 40;
-            control.Acceleration = 700;
-            control.Jerk = 8000;
+            control.Velocity = 30;
+            control.Acceleration = 300;
+            control.Jerk = 1600;
         }
     }
 
