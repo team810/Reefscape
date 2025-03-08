@@ -402,6 +402,9 @@ public class AutoFactory {
         }
         Pose2d finalPosePart1 = part1.getFinalPose(false).orElse(new Pose2d(-5,-5,new Rotation2d()));
         Pose2d finalPosePart2 = part2.getFinalPose(false).orElse(new Pose2d(-5,-5,new Rotation2d()));
+        Pose2d finalPosePart3 = part3.getFinalPose(false).orElse(new Pose2d(-5,-5,new Rotation2d()));
+        Pose2d finalPosePart4 = part4.getFinalPose(false).orElse(new Pose2d(-5,-5,new Rotation2d()));
+        Pose2d finalPosePart5 = part5.getFinalPose(false).orElse(new Pose2d(-5,-5,new Rotation2d()));
         DrivetrainSubsystem.getInstance().resetPose(part1.getInitialPose(false).get());
         autoCommand = new SequentialCommandGroup(
                 new InstantCommand(() ->
@@ -411,9 +414,12 @@ public class AutoFactory {
                 new ParallelCommandGroup(
                         generateFollowTrajectoryCommand(part1),
                         new SequentialCommandGroup(
-                                new WaitUntilCommand(() ->{
-                                    (DrivetrainSubsystem.getInstance().getPose().getX() - )
-                                }),
+                                new WaitUntilCommand(() ->
+                                    (Math.abs((DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart1.getX())) < .5) &&
+                                    (Math.abs((DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart1.getY())) < .5) &&
+                                            (Math.abs(DrivetrainSubsystem.getInstance().getPose().getRotation().getDegrees() - finalPosePart1.getRotation().getDegrees()) > 10)
+
+                                ),
                                 new InstantCommand(() ->{
                                     ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L2);
                                     CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Reef);
@@ -427,19 +433,29 @@ public class AutoFactory {
                 ),
                 sourceIntake(),
                 new ParallelCommandGroup(
-                        generateFollowTrajectoryCommand(part3)
-                ),
-                new WaitCommand(1),
-                sourceIntake(),
-                new ParallelCommandGroup(
-                        generateFollowTrajectoryCommand(part4)
+                        generateFollowTrajectoryCommand(part3),
+                        new SequentialCommandGroup(
+                        new WaitUntilCommand(() ->
+                                (Math.abs((DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart3.getX())) < .5) &&
+                                        (Math.abs((DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart3.getY())) < .5) &&
+                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getRotation().getDegrees() - finalPosePart3.getRotation().getDegrees()) > 10)
+
+                        ),
+                        new InstantCommand(() ->{
+                            ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L2);
+                            CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Reef);
+                            CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
+                        })
                 ),
                 scoreCommand(),
                 new ParallelCommandGroup(
+                        generateFollowTrajectoryCommand(part4)
+                ),
+                sourceIntake(),
+                new ParallelCommandGroup(
                         generateFollowTrajectoryCommand(part5)
-
                 )
-        );
+        ));
         System.out.println("Auto Generated");
     }
 
@@ -473,7 +489,7 @@ public class AutoFactory {
                     CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
                 }),
                 new WaitCommand(.5),
-                new WaitUntilCommand(() ->ElevatorSubsystem.getInstance().atSetpoint()),
+//                new WaitUntilCommand(() ->ElevatorSubsystem.getInstance().atSetpoint()),
                 new InstantCommand(() -> {
                     CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScore);
                 }),
