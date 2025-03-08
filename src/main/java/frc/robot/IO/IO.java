@@ -57,21 +57,21 @@ public abstract class IO {
 //        controlsButtons.put(Controls.Source, () -> secondary.getPOV() == 0);
 //        controlsButtons.put(Controls.ScoreAlgae, () -> secondary.getPOV() == 180);
 
-        controlsButtons.put(Controls.PositionL4, () -> secondary.getRawButton(4));
-        controlsButtons.put(Controls.PositionL3, () -> secondary.getRawButton(3));
-        controlsButtons.put(Controls.PositionL2, () -> secondary.getRawButton(6));
-        controlsButtons.put(Controls.PositionTrough, () -> secondary.getRawButton(5));
-        controlsButtons.put(Controls.ScoreCoral, () -> secondary.getRawButton(8));
-        controlsButtons.put(Controls.Store, () -> secondary.getRawButton(11));
+        controlsButtons.put(Controls.PositionL4, () -> secondary.getRawButton(5));
+        controlsButtons.put(Controls.PositionL3, () -> secondary.getRawButton(4));
+        controlsButtons.put(Controls.PositionL2, () -> secondary.getRawButton(3));
+        controlsButtons.put(Controls.PositionTrough, () -> secondary.getRawButton(2));
+        controlsButtons.put(Controls.ScoreCoral, () -> secondary.getRawButton(6));
+        controlsButtons.put(Controls.Store, () -> secondary.getRawButton(7));
 //
-        controlsButtons.put(Controls.AlgaeIntakeReefHigh, () -> secondary.getRawAxis(1) == 1);
-        controlsButtons.put(Controls.AlgaeIntakeReefLow, () -> secondary.getRawAxis(1) == -1);
-        controlsButtons.put(Controls.AlgaeIntakeCoral, () -> secondary.getRawAxis(0) == 1 || secondary.getRawAxis(0) == -1);
+        controlsButtons.put(Controls.AlgaeIntakeReefHigh, () -> secondary.getRawAxis(0) == 1);
+        controlsButtons.put(Controls.AlgaeIntakeReefLow, () -> secondary.getRawAxis(0) == -1);
+        controlsButtons.put(Controls.AlgaeIntakeCoral, () -> secondary.getRawAxis(1) == 1 || secondary.getRawAxis(1) == -1);
         controlsButtons.put(Controls.AlgaeIntakeGround, () -> false);
         controlsButtons.put(Controls.BargePosition, () -> secondary.getRawButton(10));
         controlsButtons.put(Controls.ProcessorPosition, () -> secondary.getRawButton(9));
-        controlsButtons.put(Controls.Source, () -> secondary.getRawButton(7));
-        controlsButtons.put(Controls.ScoreAlgae, () -> secondary.getRawButton(12));
+        controlsButtons.put(Controls.Source, () -> secondary.getRawButton(1));
+        controlsButtons.put(Controls.ScoreAlgae, () -> secondary.getRawButton(8));
 
 
 

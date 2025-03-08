@@ -75,7 +75,7 @@ public class Robot extends LoggedRobot {
     
     @Override
     public void autonomousInit() {
-        DrivetrainSubsystem.getInstance().setImuMode(4);
+        DrivetrainSubsystem.getInstance().setImuMode(0);
         NetworkTableInstance.getDefault().getTable(DrivetrainConstants.LIME_LIGHT_CORAL).getEntry("throttle_set").setInteger(0);
         NetworkTableInstance.getDefault().getTable(DrivetrainConstants.LIME_LIGHT_SOURCE).getEntry("throttle_set").setInteger(0);
         CommandScheduler.getInstance().schedule(autoFactory.getAutoCommand());

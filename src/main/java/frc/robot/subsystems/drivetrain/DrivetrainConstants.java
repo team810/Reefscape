@@ -155,8 +155,8 @@ public class DrivetrainConstants {
         CurrentLimitsConfigs currentLimitConfig = new CurrentLimitsConfigs();
         currentLimitConfig.StatorCurrentLimitEnable = true;
         currentLimitConfig.SupplyCurrentLimitEnable = true;
-        currentLimitConfig.StatorCurrentLimit = 40;
-        currentLimitConfig.SupplyCurrentLimit = 100;
+        currentLimitConfig.StatorCurrentLimit = 60;
+        currentLimitConfig.SupplyCurrentLimit = 80;
         config.CurrentLimits = currentLimitConfig;
 
         VoltageConfigs voltageConfigs = new VoltageConfigs();
@@ -252,7 +252,7 @@ public class DrivetrainConstants {
 
         config.apply(signalConfig);
         config.voltageCompensation(12);
-        config.smartCurrentLimit(20);
+        config.smartCurrentLimit(40);
         config.idleMode(SparkBaseConfig.IdleMode.kBrake);
 
         return config;

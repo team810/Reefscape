@@ -3,13 +3,19 @@ package frc.robot.commands.auto;
 import choreo.Choreo;
 import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Superstructure;
 import frc.robot.commands.CommandFactory;
+import frc.robot.subsystems.coral.CoralMotorState;
+import frc.robot.subsystems.coral.CoralPistonState;
+import frc.robot.subsystems.coral.CoralSubsystem;
 import frc.robot.subsystems.drivetrain.DrivetrainSubsystem;
+import frc.robot.subsystems.elevator.ElevatorState;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 
 import java.util.HashMap;
@@ -388,47 +394,57 @@ public class AutoFactory {
             part5 = trajectoriesRed.get(sourceTo3);
         }
 
+
         if (part1 == null || part2 == null || part3 == null || part4 == null || part5 == null) {
             System.out.println("Error Generating Auto Null path");
             autoCommand = new InstantCommand(() -> System.out.println("Problem with auto"));
             return;
         }
-
+        Pose2d finalPosePart1 = part1.getFinalPose(false).orElse(new Pose2d(-5,-5,new Rotation2d()));
+        Pose2d finalPosePart2 = part2.getFinalPose(false).orElse(new Pose2d(-5,-5,new Rotation2d()));
         DrivetrainSubsystem.getInstance().resetPose(part1.getInitialPose(false).get());
         autoCommand = new SequentialCommandGroup(
+                new InstantCommand(() ->
+                {
+                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.AutoStore);
+                }),
                 new ParallelCommandGroup(
                         generateFollowTrajectoryCommand(part1),
-                        CommandFactory.PositionL4()
-                        ),
-                score(),
-                new ParallelCommandGroup(
-                        generateFollowTrajectoryCommand(part2),
-                        CommandFactory.Source()
+                        new SequentialCommandGroup(
+                                new WaitUntilCommand(() ->{
+                                    (DrivetrainSubsystem.getInstance().getPose().getX() - )
+                                }),
+                                new InstantCommand(() ->{
+                                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L2);
+                                    CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Reef);
+                                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
+                                })
+                        )
                 ),
-                new WaitCommand(.5),
+                scoreCommand(),
                 new ParallelCommandGroup(
-                        generateFollowTrajectoryCommand(part3),
-                        CommandFactory.PositionL4()
+                        generateFollowTrajectoryCommand(part2)
                 ),
-                score(),
+                sourceIntake(),
                 new ParallelCommandGroup(
-                        generateFollowTrajectoryCommand(part4),
-                        CommandFactory.Source()
+                        generateFollowTrajectoryCommand(part3)
                 ),
-                new WaitCommand(.5),
+                new WaitCommand(1),
+                sourceIntake(),
                 new ParallelCommandGroup(
-                        generateFollowTrajectoryCommand(part5),
-                        CommandFactory.PositionL4()
+                        generateFollowTrajectoryCommand(part4)
                 ),
-                score()
+                scoreCommand(),
+                new ParallelCommandGroup(
+                        generateFollowTrajectoryCommand(part5)
+
+                )
         );
         System.out.println("Auto Generated");
     }
 
     public Command score() {
         return new SequentialCommandGroup(
-                new WaitUntilCommand(ElevatorSubsystem.getInstance()::atSetpoint),
-                CommandFactory.Score(),
                 new WaitCommand(.5)
         );
     }
@@ -447,6 +463,39 @@ public class AutoFactory {
         }else{
             System.out.println("Trajectory not found: " + trajectoryName);
         }
+    }
+
+    private Command scoreCommand() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() ->{
+                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L2);
+                    CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Reef);
+                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
+                }),
+                new WaitCommand(.5),
+                new WaitUntilCommand(() ->ElevatorSubsystem.getInstance().atSetpoint()),
+                new InstantCommand(() -> {
+                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScore);
+                }),
+                new WaitCommand(.5),
+                new InstantCommand(() -> {
+                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.Source);
+                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Source);
+                    CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Source);
+                })
+        );
+    }
+
+    public Command sourceIntake()
+    {
+        return new SequentialCommandGroup(
+                new WaitCommand(1),
+                new InstantCommand(() -> {
+                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.AutoStore);
+                    CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Store);
+                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Off);
+                })
+        );
     }
 
     private Command generateFollowTrajectoryCommand(Trajectory<SwerveSample> trajectory) {

@@ -212,8 +212,8 @@ public class ManualDriveCommand extends Command {
             xVelocity = xVelocity * xVelocity * xVelocity;
             yVelocity = yVelocity * yVelocity * yVelocity;
 
-            xVelocity  = xVelocity * 2;
-            yVelocity = yVelocity * 2;
+            xVelocity  = xVelocity * 5.8;
+            yVelocity = yVelocity * 5.8;
 
             ChassisSpeeds speeds = new ChassisSpeeds(yVelocity, xVelocity, omega);
             DrivetrainSubsystem.getInstance().setVelocityRR(speeds);

@@ -133,17 +133,13 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
 
     private void addVision(String cam) {
 
-        if (Robot.isReal() && DrivetrainConstants.USING_VISION)
+        if (Robot.isReal() && DrivetrainConstants.USING_VISION && !DriverStation.isDisabled())
         {
             boolean reject = false;
             LimelightHelpers.PoseEstimate results;
-            if (DriverStation.isDisabled())
-            {
-                results = LimelightHelpers.getBotPoseEstimate_wpiBlue(cam);
-            }else{
-                results = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cam);
-            }
-            LimelightHelpers.SetRobotOrientation(cam, odometry.getEstimatedPosition().getRotation().getDegrees(), getRate().in(edu.wpi.first.units.Units.DegreesPerSecond),0, 0, 0, 0);
+            LimelightHelpers.SetRobotOrientation(cam, odometry.getEstimatedPosition().getRotation().getDegrees(),0,0, 0, 0, 0);
+            LimelightHelpers.SetIMUMode(cam, 1);
+            results = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cam);
 
 
             if (results != null) {

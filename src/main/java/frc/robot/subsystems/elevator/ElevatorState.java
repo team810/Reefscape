@@ -7,6 +7,8 @@ public enum ElevatorState {
     L2,
     Trough,
 
+    AutoStore,
+
     Processor,
     Barge,
     AlgaeRemoveHigh,

@@ -14,8 +14,8 @@ public class ElevatorConstants {
 
     public static final Angle SOURCE_HEIGHT = Rotations.of(6.1);
     public static final Angle L4_HEIGHT = Rotations.of(27.7);
-    public static final Angle L3_HEIGHT = Rotations.of(18.4);
-    public static final Angle L2_HEIGHT = Rotations.of(12.7);
+    public static final Angle L3_HEIGHT = Rotations.of(19.2);
+    public static final Angle L2_HEIGHT = Rotations.of(13.8);
     public static final Angle TROUGH_HEIGHT = Rotations.of(2.8);
     public static final Angle PROCESSOR_HEIGHT = Rotations.of(0);
     public static final Angle ALGAE_HIGH_HEIGHT = Rotations.of(17);
@@ -25,6 +25,8 @@ public class ElevatorConstants {
     public static final Angle STORE_ALGAE_HEIGHT = Rotations.of(0);
     public static final Angle ALGAE_FLOOR = Rotations.of(.6);
     public static final Angle ALGAE_CORAL = Rotations.of(1);
+
+    public static final Angle AUTO_STORE_HEIGHT = Rotations.of(5);
 
     public static final Distance DRUM_RADIUS = Inches.of(.98);
     public static final Distance ELEVATOR_MAX_HEIGHT = Inches.of(90);
