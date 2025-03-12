@@ -29,6 +29,7 @@ public class SourceIntake extends Command {
 
     @Override
     public boolean isFinished() {
-        return CoralSubsystem.getInstance().hasCoral();
+        return false;
+//        return CoralSubsystem.getInstance().hasCoral();
     }
 }

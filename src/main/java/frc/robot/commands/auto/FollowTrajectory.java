@@ -23,9 +23,9 @@ public class FollowTrajectory extends Command {
     public FollowTrajectory(Trajectory<SwerveSample> trajectory) {
         timer = new Timer();
 
-        xController = new PIDController(5,0,0);
-        yController = new PIDController(5,0,0);
-        thetaController = new PIDController(10,0,0);
+        xController = new PIDController(4,0,0);
+        yController = new PIDController(4,0,0);
+        thetaController = new PIDController(5,0,0);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         thetaController.setTolerance(Math.toRadians(.5));
         xController.setTolerance(.02);

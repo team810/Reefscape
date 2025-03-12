@@ -56,7 +56,9 @@ public class Superstructure {
         new Trigger(IO.getButtonValue(Controls.AlgaeIntakeReefHigh)).whileTrue(new AlgaeIntakeReef(AlgaeIntakeReef.TargetHeight.High));
         new Trigger(IO.getButtonValue(Controls.AlgaeIntakeReefLow)).whileTrue(new AlgaeIntakeReef(AlgaeIntakeReef.TargetHeight.Low));
 
+
         new Trigger(IO.getButtonValue(Controls.AlgaeIntakeCoral)).whileTrue(new IntakeAlgaeGround(IntakeAlgaeGround.TargetHeight.Coral));
+        new Trigger(IO.getButtonValue(Controls.AlgaeIntakeGround)).whileTrue(new IntakeAlgaeGround(IntakeAlgaeGround.TargetHeight.Ground));
 
         new Trigger(IO.getButtonValue(Controls.PositionL4)).onTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> {
@@ -76,6 +78,7 @@ public class Superstructure {
                         new InstantCommand(() -> CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Reef))
                 )
         );
+
         new Trigger(IO.getButtonValue(Controls.PositionL2)).onTrue(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> {

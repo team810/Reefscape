@@ -46,7 +46,7 @@ public class IntakeAlgaeGround extends Command {
             ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreAlgae);
         }else{
             ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreAlgae);
-            AlgaeSubsystem.getInstance().setDriveState(AlgaeDriveStates.Off);
+            AlgaeSubsystem.getInstance().setDriveState(AlgaeDriveStates.Intake);
             AlgaeSubsystem.getInstance().setPivotState(AlgaePivotStates.Stored);
         }
     }

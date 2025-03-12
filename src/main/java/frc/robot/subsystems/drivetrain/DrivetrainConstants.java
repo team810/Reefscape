@@ -155,8 +155,8 @@ public class DrivetrainConstants {
         CurrentLimitsConfigs currentLimitConfig = new CurrentLimitsConfigs();
         currentLimitConfig.StatorCurrentLimitEnable = true;
         currentLimitConfig.SupplyCurrentLimitEnable = true;
-        currentLimitConfig.StatorCurrentLimit = 40;
-        currentLimitConfig.SupplyCurrentLimit = 80;
+        currentLimitConfig.StatorCurrentLimit = 80;
+        currentLimitConfig.SupplyCurrentLimit = 40;
         config.CurrentLimits = currentLimitConfig;
 
         VoltageConfigs voltageConfigs = new VoltageConfigs();

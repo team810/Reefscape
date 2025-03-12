@@ -206,7 +206,7 @@ public class AlgaeTalonFX implements AlgaeIO {
 
     @Override
     public boolean hasAlgae() {
-        return distanceSignal.getValue().in(Inches) < .2;
+        return false;
 //        return MathUtil.isNear(
 //                AlgaeConstants.LASER_EXPECTED.in(Units.Meters),
 //                distanceSignal.getValue().in(Units.Meters),

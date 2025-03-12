@@ -56,6 +56,7 @@ public class AlgaeSubsystem extends AdvancedSubsystem {
         Logger.recordOutput("Algae/DriveState", driveState);
 
         io.readPeriodic();
+
     }
 
     @Override
@@ -71,6 +72,8 @@ public class AlgaeSubsystem extends AdvancedSubsystem {
 //                setPivotState(AlgaePivotStates.Stored);
 //            }
 //        }
+
+        
         io.writePeriodic();
     }
 

@@ -14,4 +14,5 @@ public interface CoralIO {
     public default void writePeriodic() {return;};
     public default void simulationPeriodic() {return;};
 
+
 }

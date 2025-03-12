@@ -16,8 +16,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import org.littletonrobotics.junction.Logger;
 
-import static edu.wpi.first.units.Units.Celsius;
-import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.*;
 
 public class CoralTalonFX implements CoralIO {
     private final TalonFX motor;
@@ -71,7 +70,7 @@ public class CoralTalonFX implements CoralIO {
 
     @Override
     public void readPeriodic() {
-//        StatusSignal.refreshAll(laserDistance, laserIsDetected, appliedCurrentSignal, supplyCurrentSignal,temperaturesSignal,voltageSignal);
+        StatusSignal.refreshAll(appliedCurrentSignal, supplyCurrentSignal,temperaturesSignal,voltageSignal);
         Logger.recordOutput("Coral/HasCoral", hasCoral());
 //        Logger.recordOutput("Coral/RawDistance", laserDistance.getValue());
 //        Logger.recordOutput("Coral/IsDetected", laserIsDetected.getValue());
@@ -97,7 +96,7 @@ public class CoralTalonFX implements CoralIO {
 
     @Override
     public boolean hasCoral() {
-        return false;
+        return appliedCurrentSignal.getValue().in(Amps) > 95;
     }
 
     @Override

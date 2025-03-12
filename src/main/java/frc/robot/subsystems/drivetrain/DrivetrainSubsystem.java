@@ -138,8 +138,9 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
             boolean reject = false;
             LimelightHelpers.PoseEstimate results;
             LimelightHelpers.SetRobotOrientation(cam, odometry.getEstimatedPosition().getRotation().getDegrees(),0,0, 0, 0, 0);
-            LimelightHelpers.SetIMUMode(cam, 1);
+            setImuMode(4);
             results = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cam);
+//            results = LimelightHelpers.getBotPoseEstimate_wpiBlue(cam);
 
 
             if (results != null) {
@@ -425,7 +426,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
         // This will be getting called periodically while disabled and when the reset gyro button is pressed
         LimelightHelpers.SetRobotOrientation(DrivetrainConstants.LIME_LIGHT_SOURCE, odometry.getEstimatedPosition().getRotation().getDegrees(), 0,0,0,0,0);
         LimelightHelpers.SetRobotOrientation(DrivetrainConstants.LIME_LIGHT_CORAL, odometry.getEstimatedPosition().getRotation().getDegrees(), 0,0,0,0,0);
-        LimelightHelpers.SetRobotOrientation(DrivetrainConstants.LIME_LIGHT_ALGAE, odometry.getEstimatedPosition().getRotation().getDegrees(),0,0,0,0,0);
+//        LimelightHelpers.SetRobotOrientation(DrivetrainConstants.LIME_LIGHT_ALGAE, odometry.getEstimatedPosition().getRotation().getDegrees(),0,0,0,0,0);
     }
 
     /**
