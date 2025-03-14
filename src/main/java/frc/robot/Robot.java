@@ -75,7 +75,7 @@ public class Robot extends LoggedRobot {
     
     @Override
     public void autonomousInit() {
-        DrivetrainSubsystem.getInstance().setImuMode(0);
+        DrivetrainSubsystem.getInstance().setImuMode(2);
         NetworkTableInstance.getDefault().getTable(DrivetrainConstants.LIME_LIGHT_CORAL).getEntry("throttle_set").setInteger(0);
         NetworkTableInstance.getDefault().getTable(DrivetrainConstants.LIME_LIGHT_SOURCE).getEntry("throttle_set").setInteger(0);
         CommandScheduler.getInstance().schedule(autoFactory.getAutoCommand());
@@ -91,7 +91,7 @@ public class Robot extends LoggedRobot {
     public void teleopInit() {
         NetworkTableInstance.getDefault().getTable(DrivetrainConstants.LIME_LIGHT_CORAL).getEntry("throttle_set").setInteger(0);
         NetworkTableInstance.getDefault().getTable(DrivetrainConstants.LIME_LIGHT_SOURCE).getEntry("throttle_set").setInteger(0);
-        DrivetrainSubsystem.getInstance().setImuMode(4); // Should use both the internal gyro and the external gyro. This is the recommended mode
+        DrivetrainSubsystem.getInstance().setImuMode(2); // Should use both the internal gyro and the external gyro. This is the recommended mode
         CommandScheduler.getInstance().schedule(new ManualDriveCommand());
     }
 

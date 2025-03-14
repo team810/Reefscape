@@ -29,6 +29,8 @@ public class ElevatorTalonFX implements ElevatorIO{
     private final TalonFX follower;
     private TalonFXSimState followerSim;
 
+    private final TalonFX followerTwo;
+
     private final DynamicMotionMagicVoltage control;
     private final Follower followerControl;
 
@@ -45,6 +47,8 @@ public class ElevatorTalonFX implements ElevatorIO{
     private final StatusSignal<Current> followerCurrentSignal;
     private final StatusSignal<Voltage> followerAppliedVoltageSignal;
 
+    private final StatusSignal<Temperature> followerTempTwo;
+
     private final ElevatorSim elevatorSim;
 
     private Distance currentHeight;
@@ -56,12 +60,14 @@ public class ElevatorTalonFX implements ElevatorIO{
         follower = new TalonFX(ElevatorConstants.SECONDARY_MOTOR_ID, "mech");
         followerSim = follower.getSimState();
 
+        followerTwo = new TalonFX(3, "mech");
+
         TalonFXConfiguration config = new TalonFXConfiguration();
         // Current config
         config.CurrentLimits.SupplyCurrentLimit = 40;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
-        config.CurrentLimits.StatorCurrentLimit = 80;
+        config.CurrentLimits.StatorCurrentLimit = 60;
         if (Robot.isReal())
         {
             config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -76,44 +82,25 @@ public class ElevatorTalonFX implements ElevatorIO{
         config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
         config.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
         if (Robot.isReal()) {
-            config.Slot0.kG = 1.1;
-            config.Slot0.kS = 0;
+            config.Slot0.kP = 2.4;
+            config.Slot0.kI = 0;
+            config.Slot0.kD = .15;
+            config.Slot0.kS = .2;
+            config.Slot0.kG = .5;
             config.Slot0.kV = .125;
             config.Slot0.kA = 0.01;
-            config.Slot0.kP = 1;
-            config.Slot0.kI = 0;
-            config.Slot0.kD = 0;
-
-            config.Slot1.GravityType = GravityTypeValue.Elevator_Static;
-            config.Slot1.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
-            config.Slot1.kG = 1.1;
-            config.Slot1.kS = 0;
-            config.Slot1.kV = .125;
-            config.Slot1.kA = 0.01;
-            config.Slot1.kP = 1;
-            config.Slot1.kI = 0;
-            config.Slot1.kD = 0;
-
-            config.Slot2.GravityType = GravityTypeValue.Elevator_Static;
-            config.Slot2.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
-            config.Slot2.kG = 1.1;
-            config.Slot2.kS = 0;
-            config.Slot2.kV = .125;
-            config.Slot2.kA = 0.01;
-            config.Slot2.kP = 1;
-            config.Slot2.kI = 0;
-            config.Slot2.kD = 0;
 
             config.MotionMagic.MotionMagicCruiseVelocity = 20;
             config.MotionMagic.MotionMagicAcceleration = 100;
             config.MotionMagic.MotionMagicJerk = 1000;
         }else{
+            config.Slot0.kP = 2.4;
+            config.Slot0.kI = 0;
+            config.Slot0.kD = .15;
+            config.Slot0.kS = .2;
             config.Slot0.kG = .5;
             config.Slot0.kV = .125;
             config.Slot0.kA = 0.01;
-            config.Slot0.kP = 1;
-            config.Slot0.kI = 0;
-            config.Slot0.kD = 0;
 
             config.MotionMagic.MotionMagicCruiseVelocity = 100;
             config.MotionMagic.MotionMagicAcceleration = 500;
@@ -122,6 +109,7 @@ public class ElevatorTalonFX implements ElevatorIO{
 
         leader.getConfigurator().apply(config);
         follower.getConfigurator().apply(config);
+        followerTwo.getConfigurator().apply(config);
 
         positionSignal = leader.getPosition();
         velocitySignal = leader.getVelocity();
@@ -136,6 +124,8 @@ public class ElevatorTalonFX implements ElevatorIO{
         followerCurrentSignal = follower.getSupplyCurrent();
         followerAppliedVoltageSignal = follower.getMotorVoltage();
 
+        followerTempTwo = followerTwo.getDeviceTemp();
+
         control = new DynamicMotionMagicVoltage(0,20,50,500);
         control.EnableFOC = true;
         control.Slot = 0;
@@ -145,6 +135,7 @@ public class ElevatorTalonFX implements ElevatorIO{
         followerControl = new Follower(leader.getDeviceID(), false);
         followerControl.UpdateFreqHz = 1000;
         follower.setControl(followerControl);
+        followerTwo.setControl(followerControl);
 
         leader.setPosition(0);
 
@@ -152,7 +143,7 @@ public class ElevatorTalonFX implements ElevatorIO{
         currentHeight = Inches.of(positionSignal.getValue().in(Rotations) * ElevatorConstants.CONVERSION_FACTOR);
 
         elevatorSim = new ElevatorSim(
-                DCMotor.getKrakenX60Foc(2),
+                DCMotor.getKrakenX60Foc(3),
                 6,
                 Pounds.of(15).in(Kilograms),
                 ElevatorConstants.DRUM_RADIUS.in(Meters),
@@ -180,6 +171,8 @@ public class ElevatorTalonFX implements ElevatorIO{
                 followerAppliedVoltageSignal,
                 followerTempSignal,
 
+                followerTempTwo,
+
                 leader.getMotorVoltage()
         );
 
@@ -203,6 +196,8 @@ public class ElevatorTalonFX implements ElevatorIO{
         Logger.recordOutput("Elevator/Follower/Voltage", followerAppliedVoltageSignal.getValue().in(Units.Volts));
         Logger.recordOutput("Elevator/Follower/Current", followerCurrentSignal.getValue().in(Units.Amps));
         Logger.recordOutput("Elevator/Follower/Temperature",followerTempSignal.getValue().in(Celsius));
+
+        Logger.recordOutput("Elevator/FollowerTwo/Temp", followerTempTwo.getValue().in(Celsius));
     }
 
     @Override
@@ -240,14 +235,14 @@ public class ElevatorTalonFX implements ElevatorIO{
 
         if (positionSignal.getValue().in(Rotations) > control.Position) {
             // Moving down
-            control.Velocity = 20;
-            control.Acceleration = 50;
+            control.Velocity = 55;
+            control.Acceleration = 120;
             control.Jerk = 500;
         }else{
             // Moving up
-            control.Velocity = 30;
-            control.Acceleration = 300;
-            control.Jerk = 1600;
+            control.Velocity = 50;
+            control.Acceleration = 120;
+            control.Jerk = 500;
         }
     }
 

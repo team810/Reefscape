@@ -13,7 +13,7 @@ public class ElevatorConstants {
     public static final double CONVERSION_FACTOR = 2.751; // rotations/in
 
     public static final Angle SOURCE_HEIGHT = Rotations.of(6.1);
-    public static final Angle L4_HEIGHT = Rotations.of(27.7);
+    public static final Angle L4_HEIGHT = Rotations.of(27.9);
     public static final Angle L3_HEIGHT = Rotations.of(19.2);
     public static final Angle L2_HEIGHT = Rotations.of(13.8);
     public static final Angle TROUGH_HEIGHT = Rotations.of(2.8);

@@ -9,7 +9,7 @@ import static edu.wpi.first.units.Units.*;
 
 public class AlgaeConstants {
     public static final String CANBUS = "mech";
-    public static final int PIVOT_MOTOR_ID = 3;
+    public static final int PIVOT_MOTOR_ID = 7;
     public static final int DRIVE_MOTOR_ID = 4;
     public static final int LASER_ID = 6;
 

@@ -2,6 +2,8 @@ package frc.robot;
 
 import choreo.util.ChoreoAllianceFlipUtil;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj2.command.*;
@@ -20,6 +22,7 @@ import frc.robot.subsystems.coral.CoralSubsystem;
 import frc.robot.subsystems.drivetrain.DrivetrainSubsystem;
 import frc.robot.subsystems.elevator.ElevatorState;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.led.LedUtil;
 import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.Inches;
@@ -42,6 +45,8 @@ public class Superstructure {
         ElevatorSubsystem.getInstance();
         CoralSubsystem.getInstance();
         AlgaeSubsystem.getInstance();
+        ElevatorSubsystem.getInstance();
+        LedUtil.getInstance();
 
         pneumaticsControlModule = new PneumaticsControlModule();
         pneumaticsControlModule.enableCompressorDigital();

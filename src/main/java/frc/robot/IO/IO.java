@@ -70,7 +70,7 @@ public abstract class IO {
         controlsButtons.put(Controls.AlgaeIntakeGround, () -> false);
         controlsButtons.put(Controls.BargePosition, () -> secondary.getRawButton(10));
         controlsButtons.put(Controls.ProcessorPosition, () -> secondary.getRawButton(9));
-        controlsButtons.put(Controls.Source, () -> secondary.getRawButton(1)); // 1
+        controlsButtons.put(Controls.Source, () -> secondary.getRawButton(1));
         controlsButtons.put(Controls.ScoreAlgae, () -> secondary.getRawButton(8));
 
 

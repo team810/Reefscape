@@ -138,9 +138,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
             boolean reject = false;
             LimelightHelpers.PoseEstimate results;
             LimelightHelpers.SetRobotOrientation(cam, odometry.getEstimatedPosition().getRotation().getDegrees(),0,0, 0, 0, 0);
-            setImuMode(4);
             results = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cam);
-//            results = LimelightHelpers.getBotPoseEstimate_wpiBlue(cam);
 
 
             if (results != null) {

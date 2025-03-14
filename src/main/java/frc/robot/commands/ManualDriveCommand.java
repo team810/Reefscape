@@ -19,6 +19,10 @@ import frc.robot.IO.IO;
 import frc.robot.Superstructure;
 import frc.robot.subsystems.drivetrain.DrivetrainConstants;
 import frc.robot.subsystems.drivetrain.DrivetrainSubsystem;
+import frc.robot.subsystems.elevator.ElevatorState;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.led.LedState;
+import frc.robot.subsystems.led.LedUtil;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
@@ -321,6 +325,7 @@ public class ManualDriveCommand extends Command {
                     alignLastTick = true;
                 }
 
+
                 double xOutput = xAlignController.calculate(currentPose.getX(), targetPose.getX());
                 double yOutput = yAlignController.calculate(currentPose.getY(), targetPose.getY());
                 double omegaOutput = omegaAlignController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
@@ -345,6 +350,12 @@ public class ManualDriveCommand extends Command {
                 double xOutput = xAlignController.calculate(currentPose.getX(), targetPose.getX());
                 double yOutput = yAlignController.calculate(currentPose.getY(), targetPose.getY());
                 double omegaOutput = omegaAlignController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
+
+                if ((MathUtil.applyDeadband(xOutput, .1) == 0) & (MathUtil.applyDeadband(yOutput,.1) == 0) & (MathUtil.applyDeadband(omegaOutput, .4) == 0) & ElevatorSubsystem.getInstance().atSetpoint() & ElevatorSubsystem.getInstance().getElevatorState() == ElevatorState.Source) {
+                    LedUtil.getInstance().setState(LedState.THROW);
+                }else{
+                    LedUtil.getInstance().setState(LedState.ALIGNING);
+                }
 
                 DrivetrainSubsystem.getInstance().setTargetPoseLog(targetPose, targetPose.getX(), targetPose.getY(), targetPose.getRotation().getRadians(), xOutput, yOutput, omegaOutput, xAlignController.atSetpoint(), yAlignController.atSetpoint(), omegaAlignController.atSetpoint());
                 DrivetrainSubsystem.getInstance().setPositionalControl(true);

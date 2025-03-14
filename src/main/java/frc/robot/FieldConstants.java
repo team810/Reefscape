@@ -28,10 +28,10 @@ public class FieldConstants {
 
         public static final Pose2d FR = new Pose2d(3.8382577896118164, 2.921952247619629, Rotation2d.fromDegrees(60));
         public static final Pose2d FR_RIGHT = new Pose2d(3.98 , 2.38, Rotation2d.fromDegrees(60));
-        public static final Pose2d FR_LEFT = new Pose2d(3.72 ,2.6 , Rotation2d.fromDegrees(60));
+        public static final Pose2d FR_LEFT = new Pose2d(3.72 ,2.55 , Rotation2d.fromDegrees(60));
 
         public static final Pose2d LEFT_SOURCE = new Pose2d(1.24, 7.03, Rotation2d.fromDegrees(126));
-        public static final Pose2d RIGHT_SOURCE = new Pose2d(1.09, 1.16, Rotation2d.fromDegrees(-126));
+        public static final Pose2d RIGHT_SOURCE = new Pose2d(1.28, .96, Rotation2d.fromDegrees(-126));
     }
     public static class RedReef {
         public static final Pose2d F = new Pose2d();
