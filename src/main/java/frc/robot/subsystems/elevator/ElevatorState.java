@@ -17,6 +17,7 @@ public enum ElevatorState {
     AlgaeCoral,
 
     StoreCoral,
-    StoreAlgae
+    StoreAlgae,
+    PreStore
 
 }

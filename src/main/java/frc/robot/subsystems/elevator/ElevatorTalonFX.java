@@ -80,11 +80,11 @@ public class ElevatorTalonFX implements ElevatorIO{
         // Motion config
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
-        config.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
+        config.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
         if (Robot.isReal()) {
             config.Slot0.kP = 2.4;
             config.Slot0.kI = 0;
-            config.Slot0.kD = .15;
+            config.Slot0.kD = .135;
             config.Slot0.kS = .2;
             config.Slot0.kG = .5;
             config.Slot0.kV = .125;
@@ -204,10 +204,14 @@ public class ElevatorTalonFX implements ElevatorIO{
     public void writePeriodic() {
         control.Position = targetHeight.in(Rotations);
 
-        if (control.Position == 0 && MathUtil.isNear(0,positionSignal.getValue().in(Rotations), .6)){
+        if (control.Position == 0 && MathUtil.isNear(0,positionSignal.getValue().in(Rotations), 2)){
             leader.setControl(new VoltageOut(0));
+            follower.setControl(new VoltageOut(0));
+            followerTwo.setControl(new VoltageOut(0));
         }else {
             leader.setControl(control);
+            follower.setControl(followerControl);
+            followerTwo.setControl(followerControl);
         }
     }
 
