@@ -58,6 +58,7 @@ public class ManualDriveCommand extends Command {
     private Rotation2d lockedHeading = new Rotation2d();
 
     private final ArrayList<Pose2d> reefSections = new ArrayList<>();
+    private final ArrayList<Pose2d> poi = new ArrayList<>();
 
     private final Pose2d F;
     private final Pose2d F_LEFT;
@@ -119,28 +120,28 @@ public class ManualDriveCommand extends Command {
 
         if (Superstructure.getInstance().getAlliance().equals(DriverStation.Alliance.Red)) {
             F = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.F);
-            F_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.F_LEFT);
-            F_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.F_RIGHT);
+            F_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_A);
+            F_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_B);
 
             FL = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.FL);
-            FL_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.FL_LEFT);
-            FL_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.FL_RIGHT);
+            FL_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_K);
+            FL_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_L);
 
             BL = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.BL);
-            BL_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.BL_LEFT);
-            BL_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.BL_RIGHT);
+            BL_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_I);
+            BL_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_J);
 
             B = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.B);
-            B_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.B_LEFT);
-            B_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.B_RIGHT);
+            B_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_G);
+            B_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_H);
 
             BR = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.BR);
-            BR_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.BR_LEFT);
-            BR_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.BR_RIGHT);
+            BR_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_E);
+            BR_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_F);
 
             FR = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.FR);
-            FR_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.FR_LEFT);
-            FR_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.FR_RIGHT);
+            FR_LEFT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_C);
+            FR_RIGHT = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.REEF_D);
 
             LEFT_SOURCE = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.LEFT_SOURCE);
             RIGHT_SOURCE = ChoreoAllianceFlipUtil.flip(FieldConstants.BlueReef.RIGHT_SOURCE);
@@ -151,30 +152,39 @@ public class ManualDriveCommand extends Command {
             reefSections.add(B);
             reefSections.add(BR);
             reefSections.add(FR);
+
+            poi.add(F);
+            poi.add(FL);
+            poi.add(BL);
+            poi.add(B);
+            poi.add(BR);
+            poi.add(FR);
+            poi.add(LEFT_SOURCE);
+            poi.add(RIGHT_SOURCE);
         }else{
             F = FieldConstants.BlueReef.F;
-            F_LEFT = FieldConstants.BlueReef.F_LEFT;
-            F_RIGHT = FieldConstants.BlueReef.F_RIGHT;
+            F_LEFT = FieldConstants.BlueReef.REEF_A;
+            F_RIGHT = FieldConstants.BlueReef.REEF_B;
 
             FL = FieldConstants.BlueReef.FL;
-            FL_LEFT = FieldConstants.BlueReef.FL_LEFT;
-            FL_RIGHT = FieldConstants.BlueReef.FL_RIGHT;
+            FL_LEFT = FieldConstants.BlueReef.REEF_K;
+            FL_RIGHT = FieldConstants.BlueReef.REEF_L;
 
             BL = FieldConstants.BlueReef.BL;
-            BL_LEFT = FieldConstants.BlueReef.BL_LEFT;
-            BL_RIGHT = FieldConstants.BlueReef.BL_RIGHT;
+            BL_LEFT = FieldConstants.BlueReef.REEF_I;
+            BL_RIGHT = FieldConstants.BlueReef.REEF_J;
 
             B = FieldConstants.BlueReef.B;
-            B_LEFT = FieldConstants.BlueReef.B_LEFT;
-            B_RIGHT = FieldConstants.BlueReef.B_RIGHT;
+            B_LEFT = FieldConstants.BlueReef.REEF_G;
+            B_RIGHT = FieldConstants.BlueReef.REEF_H;
 
             BR = FieldConstants.BlueReef.BR;
-            BR_LEFT = FieldConstants.BlueReef.BR_LEFT;
-            BR_RIGHT = FieldConstants.BlueReef.BR_RIGHT;
+            BR_LEFT = FieldConstants.BlueReef.REEF_E;
+            BR_RIGHT = FieldConstants.BlueReef.REEF_F;
 
             FR = FieldConstants.BlueReef.FR;
-            FR_LEFT = FieldConstants.BlueReef.FR_LEFT;
-            FR_RIGHT = FieldConstants.BlueReef.FR_RIGHT;
+            FR_LEFT = FieldConstants.BlueReef.REEF_C;
+            FR_RIGHT = FieldConstants.BlueReef.REEF_D;
 
             LEFT_SOURCE = FieldConstants.BlueReef.LEFT_SOURCE;
             RIGHT_SOURCE = FieldConstants.BlueReef.RIGHT_SOURCE;
@@ -185,6 +195,15 @@ public class ManualDriveCommand extends Command {
             reefSections.add(FieldConstants.BlueReef.B);
             reefSections.add(FieldConstants.BlueReef.BR);
             reefSections.add(FieldConstants.BlueReef.FR);
+
+            poi.add(FieldConstants.BlueReef.F);
+            poi.add(FieldConstants.BlueReef.FL);
+            poi.add(FieldConstants.BlueReef.BL);
+            poi.add(FieldConstants.BlueReef.B);
+            poi.add(FieldConstants.BlueReef.BR);
+            poi.add(FieldConstants.BlueReef.FR);
+            poi.add(LEFT_SOURCE);
+            poi.add(RIGHT_SOURCE);
         }
 
 
@@ -205,7 +224,7 @@ public class ManualDriveCommand extends Command {
         boolean robotRel = robotRelative.getAsBoolean();
 
         if (robotRel) {
-            Pose2d nearestReef = DrivetrainSubsystem.getInstance().getPose().nearest(reefSections);
+            Pose2d nearestReef = DrivetrainSubsystem.getInstance().getPose().nearest(poi);
             double xVelocity = -driveXVelocity.getAsDouble();
             double yVelocity = -driveYVelocity.getAsDouble();
             double omega = omegaAlignController.calculate(DrivetrainSubsystem.getInstance().getPose().getRotation().getRadians(), nearestReef.getRotation().getRadians());
@@ -324,7 +343,6 @@ public class ManualDriveCommand extends Command {
                     }
                     alignLastTick = true;
                 }
-
 
                 double xOutput = xAlignController.calculate(currentPose.getX(), targetPose.getX());
                 double yOutput = yAlignController.calculate(currentPose.getY(), targetPose.getY());

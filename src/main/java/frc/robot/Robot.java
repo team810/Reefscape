@@ -44,6 +44,21 @@ public class Robot extends LoggedRobot {
 
         CommandScheduler.getInstance().unregisterSubsystem(DrivetrainSubsystem.getInstance());
         autoFactory = new AutoFactory();
+
+        System.out.println("A:" + FieldConstants.BlueReef.REEF_A);
+        System.out.println("B:" + FieldConstants.BlueReef.REEF_B);
+        System.out.println("C:" + FieldConstants.BlueReef.REEF_C);
+        System.out.println("D:" + FieldConstants.BlueReef.REEF_D);
+        System.out.println("E:" + FieldConstants.BlueReef.REEF_E);
+        System.out.println("F:" + FieldConstants.BlueReef.REEF_F);
+        System.out.println("G:" + FieldConstants.BlueReef.REEF_G);
+        System.out.println("H:" + FieldConstants.BlueReef.REEF_H);
+        System.out.println("I:" + FieldConstants.BlueReef.REEF_I);
+        System.out.println("J:" + FieldConstants.BlueReef.REEF_J);
+        System.out.println("K:" + FieldConstants.BlueReef.REEF_K);
+        System.out.println("L:" + FieldConstants.BlueReef.REEF_L);
+
+
     }
 
     @Override
