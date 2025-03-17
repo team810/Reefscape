@@ -94,6 +94,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
 
         Observer.SwerveObservation observation = observer.getObservations().get(0);
         observer.clearObservations();
+
         odometry = new SwerveDrivePoseEstimator(
                 kinematics,
                 gyro.getRotation2d(),

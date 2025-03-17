@@ -104,7 +104,7 @@ public class ManualDriveCommand extends Command {
         yAlignController.setTolerance(.02);
         omegaAlignController = new PIDController(7, 0, 0);
         omegaAlignController.enableContinuousInput(-Math.PI, Math.PI);
-        omegaAlignController.setTolerance(Math.toRadians(.2));
+        omegaAlignController.setTolerance(Math.toRadians(1));
 
         driveXVelocity = IO.getJoystickValue(Controls.driveXVelocity);
         driveYVelocity = IO.getJoystickValue(Controls.driveYVelocity);
