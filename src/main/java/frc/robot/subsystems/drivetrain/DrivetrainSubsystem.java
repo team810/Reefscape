@@ -112,7 +112,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
             // Change the camera pose relative to robot center (x forward, y left, z up, degrees)
             LimelightHelpers.setCameraPose_RobotSpace(DrivetrainConstants.LIME_LIGHT_CORAL,.276, .0127,.2667,0,0,0);
             LimelightHelpers.setCameraPose_RobotSpace(DrivetrainConstants.LIME_LIGHT_SOURCE,-.2476,.107,.9779,0,50,0);
-//            LimelightHelpers.setCameraPose_RobotSpace(DrivetrainConstants.LIME_LIGHT_ALGAE, .3175,-.1524,.22225,0,0,0);
+            LimelightHelpers.setCameraPose_RobotSpace(DrivetrainConstants.LIME_LIGHT_REEFG, .295,.066,.635,0,-23,50);
         }
 
         targetPose = new Pose2d();
@@ -140,8 +140,6 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
             LimelightHelpers.PoseEstimate results;
             LimelightHelpers.SetRobotOrientation(cam, odometry.getEstimatedPosition().getRotation().getDegrees(),0,0, 0, 0, 0);
             results = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cam);
-
-
             if (results != null) {
 
                 if (results.avgTagArea > .01)
@@ -171,7 +169,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
         backLeft.readPeriodic(moduleObservations[2]);
         backRight.readPeriodic(moduleObservations[3]);
 
-//        addVision(DrivetrainConstants.LIME_LIGHT_ALGAE);
+        addVision(DrivetrainConstants.LIME_LIGHT_REEFG);
         addVision(DrivetrainConstants.LIME_LIGHT_CORAL);
         addVision(DrivetrainConstants.LIME_LIGHT_SOURCE);
 
@@ -216,10 +214,11 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(targetSpeed);
         targetStates = states;
 
-        states[0].optimize(Rotation2d.fromRadians(frontLeft.getTheta().in(Radians)));
-        states[1].optimize(Rotation2d.fromRadians(frontRight.getTheta().in(Radians)));
-        states[2].optimize(Rotation2d.fromRadians(backLeft.getTheta().in(Radians)));
-        states[3].optimize(Rotation2d.fromRadians(backRight.getTheta().in(Radians)));
+//        states[0].optimize(Rotation2d.fromRadians(frontLeft.getTheta().in(Radians)));
+//        states[1].optimize(Rotation2d.fromRadians(frontRight.getTheta().in(Radians)));
+//        states[2].optimize(Rotation2d.fromRadians(backLeft.getTheta().in(Radians)));
+//        states[3].optimize(Rotation2d.fromRadians(backRight.getTheta().in(Radians)));
+
 
         frontLeft.setTargetState(states[0]);
         frontRight.setTargetState(states[1]);

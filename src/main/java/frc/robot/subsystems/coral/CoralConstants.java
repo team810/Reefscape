@@ -15,7 +15,7 @@ public class CoralConstants {
     public static final double LASER_TOLERANCE = 0.05;
 
     public static final Voltage SOURCE_VOLTAGE = Voltage.ofBaseUnits(5, Units.Volts);
-    public static final Voltage REEF_SCORE_VOLTAGE = Voltage.ofBaseUnits(-12, Units.Volts);
+    public static final Voltage REEF_SCORE_VOLTAGE = Voltage.ofBaseUnits(-8, Units.Volts);
     public static final Voltage TROUGH_SCORE_VOLTAGE = Voltage.ofBaseUnits(-5, Units.Volts);
     public static final Voltage HOLD_SCORE_VOLTAGE = Voltage.ofBaseUnits(2, Units.Volts);
 

@@ -71,7 +71,7 @@ public class DrivetrainConstants {
 
     public static final double MAX_ANGULAR_VELOCITY_ACCEPT_VISION_DATA = 2 * Math.PI; // 1 rotation per second
     public static final String LIME_LIGHT_SOURCE = "limelight-source";
-    public static final String LIME_LIGHT_ALGAE = "limelight-algae";
+    public static final String LIME_LIGHT_REEFG = "limelight-reefg";
     public static final String LIME_LIGHT_CORAL = "limelight-reef";
     public static final boolean USING_VISION = true;
 
@@ -156,7 +156,7 @@ public class DrivetrainConstants {
         currentLimitConfig.StatorCurrentLimitEnable = true;
         currentLimitConfig.SupplyCurrentLimitEnable = true;
         currentLimitConfig.StatorCurrentLimit = 130;
-        currentLimitConfig.SupplyCurrentLimit = 50;
+        currentLimitConfig.SupplyCurrentLimit = 40;
         config.CurrentLimits = currentLimitConfig;
 
         VoltageConfigs voltageConfigs = new VoltageConfigs();
@@ -252,7 +252,7 @@ public class DrivetrainConstants {
 
         config.apply(signalConfig);
         config.voltageCompensation(12);
-        config.smartCurrentLimit(40);
+        config.smartCurrentLimit(30);
         config.idleMode(SparkBaseConfig.IdleMode.kBrake);
 
         return config;

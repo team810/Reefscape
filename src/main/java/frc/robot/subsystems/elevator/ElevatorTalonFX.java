@@ -85,7 +85,7 @@ public class ElevatorTalonFX implements ElevatorIO{
             config.Slot0.kP = 2.4;
             config.Slot0.kI = 0;
             config.Slot0.kD = .135;
-            config.Slot0.kS = .2;
+            config.Slot0.kS = .3;
             config.Slot0.kG = .5;
             config.Slot0.kV = .125;
             config.Slot0.kA = 0.01;
@@ -204,7 +204,7 @@ public class ElevatorTalonFX implements ElevatorIO{
     public void writePeriodic() {
         control.Position = targetHeight.in(Rotations);
 
-        if (control.Position == 0 && MathUtil.isNear(0,positionSignal.getValue().in(Rotations), 2)){
+        if (control.Position == ElevatorConstants.STORE_CORAL_HEIGHT.in(Rotations) && positionSignal.getValue().in(Rotations) < ElevatorConstants.STORE_CORAL_HEIGHT.in(Rotations) + .5){
             leader.setControl(new VoltageOut(0));
             follower.setControl(new VoltageOut(0));
             followerTwo.setControl(new VoltageOut(0));

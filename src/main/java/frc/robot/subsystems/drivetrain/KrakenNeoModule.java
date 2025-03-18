@@ -261,7 +261,7 @@ public class KrakenNeoModule implements SwerveModuleIO{
                 driveMotor.getPosition(),
                 driveMotor.getVelocity(),
                 driveMotor.getAcceleration(),
-                driveMotor.getTorqueCurrent(),
+                driveMotor.getStatorCurrent(),
                 driveMotor.getMotorVoltage(),
                 encoder.getAbsolutePosition(),
                 encoder.getVelocity()

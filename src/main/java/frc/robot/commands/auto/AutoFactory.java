@@ -410,8 +410,9 @@ public class AutoFactory {
 
         double raiseElevatorDistance = .5;
         double heightBeforeMove = 15;
-        double delayBeforeShooting = .1;
-        double delayBeforeGoingDown = .15;
+        double delayBeforeShooting = 0;
+        double delayBeforeGoingDown = .1;
+        double actuatePistion = .1;
 
         autoCommand = new SequentialCommandGroup(
                 new ParallelCommandGroup(
@@ -478,7 +479,7 @@ public class AutoFactory {
                 new InstantCommand(() -> {
                     CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScore);
                 }),
-                new WaitCommand(delayBeforeGoingDown),
+                new WaitCommand(actuatePistion),
                 new InstantCommand(() -> {
                     ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);
                     CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Source);
