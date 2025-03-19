@@ -47,6 +47,7 @@ public class DrivetrainConstants {
     public static final double STEER_KP = 4.5; // voltage/radians proportion of volts to error in radians
     public static final double STEER_KI = 0;
     public static final double STEER_KD = 0;
+    public static final double STEER_KS = 0; // output needed to overcome static friction
 
     public static final double YAW_KP = 5; // Radians per second / radians
 
@@ -252,7 +253,7 @@ public class DrivetrainConstants {
 
         config.apply(signalConfig);
         config.voltageCompensation(12);
-        config.smartCurrentLimit(30);
+        config.smartCurrentLimit(50);
         config.idleMode(SparkBaseConfig.IdleMode.kBrake);
 
         return config;

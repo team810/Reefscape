@@ -10,12 +10,14 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
@@ -110,8 +112,10 @@ public class KrakenNeoModule implements SwerveModuleIO{
         Logger.recordOutput("Drivetrain/" + idString + "/" + "Position", getPosition());
         Logger.recordOutput("Drivetrain/" + idString + "/" + "Velocity", getVelocity());
         Logger.recordOutput("Drivetrain/" + idString + "/" + "Acceleration", getAcceleration());
-        Logger.recordOutput("Drivetrain/" + idString + "/" + "AppliedDriveVoltage", rawInput.appliedVoltage);
-        Logger.recordOutput("Drivetrain/" + idString + "/" + "DriveCurrent", rawInput.current);
+        Logger.recordOutput("Drivetrain/" + idString + "/" + "DriveAppliedVoltage", rawInput.appliedVoltage);
+        Logger.recordOutput("Drivetrain/" + idString + "/" + "DriveSupplyVoltage", rawInput.supplyVoltage);
+        Logger.recordOutput("Drivetrain/" + idString + "/" + "DriveSupplyCurrent", rawInput.supplyCurrent);
+        Logger.recordOutput("Drivetrain/" + idString + "/" + "DriveAppliedCurrent", rawInput.appliedCurrent);
         Logger.recordOutput("Drivetrain/" + idString + "/" + "Force", getForce());
         Logger.recordOutput("Drivetrain/" + idString + "/" + "Torque", getTorque());
 
@@ -121,40 +125,32 @@ public class KrakenNeoModule implements SwerveModuleIO{
 
     @Override
     public void writePeriodic() {
-        // Control over drive motor
+        targetState.optimize(new Rotation2d(getTheta().in(Radians)));
         double velocity = targetState.speedMetersPerSecond;
-        double acceleration = 0;
         velocity = (velocity/(DrivetrainConstants.WHEEL_DIAMETER_METERS * Math.PI)) * DrivetrainConstants.DRIVE_GEAR_RATIO; // converts mps to rotations of motor per second
-        acceleration = (velocity - ((getVelocity().in(MetersPerSecond)/(DrivetrainConstants.WHEEL_DIAMETER_METERS * Math.PI)) * DrivetrainConstants.DRIVE_GEAR_RATIO)) / Robot.PERIOD;
-
-//        double iTime;
-//        double fTime;
-//        iTime = RobotController.getFPGATime();
 
         // This code was taking up to .019 milliseconds to run
-//        driveMotorControl = new VelocityVoltage(velocity);
-//        driveMotorControl.UpdateFreqHz = 1000;
-//        driveMotorControl.Acceleration = acceleration;
-//        driveMotorControl.FeedForward = 0;
-//        driveMotorControl.Slot = 0;
-//        driveMotorControl.EnableFOC = true;
-//        driveMotorControl.LimitForwardMotion = false;
-//        driveMotorControl.LimitReverseMotion = false;
-//        driveMotorControl.UseTimesync = true;
-//////
-//        driveMotor.setControl(driveMotorControl);
+        driveMotorControl = new VelocityVoltage(velocity);
+        driveMotorControl.UpdateFreqHz = 1000;
+        driveMotorControl.FeedForward = 0;
+        driveMotorControl.Slot = 0;
+        driveMotorControl.EnableFOC = true;
+        driveMotorControl.LimitForwardMotion = false;
+        driveMotorControl.LimitReverseMotion = false;
+        driveMotorControl.UseTimesync = true;
+        driveMotor.setControl(driveMotorControl);
 
-        driveMotor.setVoltage((velocity/(DrivetrainConstants.MAX_RPM_FOC/60)) * 12);
-
-//        fTime = RobotController.getFPGATime();
-//        Logger.recordOutput("ReadPeriodicTime",(fTime-iTime)/1000000);
-
-        // Control over steer motor
         double targetAngle = MathUtil.angleModulus(targetState.angle.getRadians()); // The angle is rapped from -PI to PI
-        steerAppliedVoltage = steerController.calculate(getTheta().in(Radians),targetAngle);
+        if (!DriverStation.isDisabled()) {
+            steerAppliedVoltage = steerController.calculate(getTheta().in(Radians),targetAngle);
+        }else{
+            steerAppliedVoltage = 0;
+        }
+        if (steerAppliedVoltage != 0) {
+            steerAppliedVoltage = steerAppliedVoltage + DrivetrainConstants.STEER_KS;
+        }
         steerAppliedVoltage = MathUtil.clamp(steerAppliedVoltage, -12, 12);
         steerMotor.setVoltage(steerAppliedVoltage);
-
         Logger.recordOutput("Drivetrain/" + idString + "/" + "AppliedState", targetState);
         Logger.recordOutput("Drivetrain/" + idString + "/" + "AppliedVelocityRPM", velocity);
         Logger.recordOutput("Drivetrain/" + idString + "/" + "Target Angle", targetAngle);
@@ -164,7 +160,6 @@ public class KrakenNeoModule implements SwerveModuleIO{
     @Override
     public void moduleSim() {
         // Just drive motor
-
         driveMotorSim.setInputVoltage(driveSimState.getMotorVoltage());
         driveMotorSim.update(Robot.PERIOD);
 
@@ -208,7 +203,7 @@ public class KrakenNeoModule implements SwerveModuleIO{
 
     @Override
     public Torque getTorque() {
-        torque = DCMotor.getKrakenX60Foc(1).getTorque(rawInput.current.in(Amps));
+        torque = DCMotor.getKrakenX60Foc(1).getTorque(rawInput.appliedCurrent.in(Amps));
         torque = torque * DrivetrainConstants.DRIVE_GEAR_RATIO;
 
         return NewtonMeters.of(torque);
@@ -228,9 +223,7 @@ public class KrakenNeoModule implements SwerveModuleIO{
 
     @Override
     public Angle getTheta() {
-        theta = rawInput.theta.in(Rotations);
-        theta = theta * 2 * Math.PI; // To convert from rotations to radians
-        return Radians.of(theta);
+        return rawInput.theta;
     }
 
     @Override
@@ -261,7 +254,9 @@ public class KrakenNeoModule implements SwerveModuleIO{
                 driveMotor.getPosition(),
                 driveMotor.getVelocity(),
                 driveMotor.getAcceleration(),
+                driveMotor.getSupplyCurrent(),
                 driveMotor.getStatorCurrent(),
+                driveMotor.getSupplyVoltage(),
                 driveMotor.getMotorVoltage(),
                 encoder.getAbsolutePosition(),
                 encoder.getVelocity()

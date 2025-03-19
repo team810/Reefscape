@@ -23,6 +23,7 @@ public class CoralTalonFX implements CoralIO {
     private final VoltageOut voltageControl;
 
     private final StatusSignal<Voltage> voltageSignal;
+    private final StatusSignal<Voltage> supplyVoltageSignal;
     private final StatusSignal<Temperature> temperaturesSignal;
     private final StatusSignal<Current> appliedCurrentSignal;
     private final StatusSignal<Current> supplyCurrentSignal;
@@ -46,7 +47,6 @@ public class CoralTalonFX implements CoralIO {
         config.Voltage.PeakReverseVoltage = -12;
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         motor.getConfigurator().apply(config);
-
         voltageControl = new VoltageOut(0);
         voltageControl.EnableFOC = true;
 
@@ -54,6 +54,8 @@ public class CoralTalonFX implements CoralIO {
         supplyCurrentSignal = motor.getSupplyCurrent();
         appliedCurrentSignal = motor.getStatorCurrent();
         temperaturesSignal = motor.getDeviceTemp();
+
+        supplyVoltageSignal = motor.getSupplyVoltage();
 
 //        sensor = new CANrange(CoralConstants.LASER_ID, CoralConstants.CAN_BUS);
 //        laserDistance = sensor.getDistance();
@@ -70,13 +72,14 @@ public class CoralTalonFX implements CoralIO {
 
     @Override
     public void readPeriodic() {
-        StatusSignal.refreshAll(appliedCurrentSignal, supplyCurrentSignal,temperaturesSignal,voltageSignal);
+        StatusSignal.refreshAll(appliedCurrentSignal, supplyCurrentSignal,temperaturesSignal,voltageSignal, supplyVoltageSignal);
         Logger.recordOutput("Coral/HasCoral", hasCoral());
 //        Logger.recordOutput("Coral/RawDistance", laserDistance.getValue());
 //        Logger.recordOutput("Coral/IsDetected", laserIsDetected.getValue());
 
         Logger.recordOutput("Coral/AppliedCurrent", appliedCurrentSignal.getValue());
         Logger.recordOutput("Coral/SupplyCurrent", supplyCurrentSignal.getValue());
+        Logger.recordOutput("coral/SupplyVoltage", supplyCurrentSignal.getValue());
         Logger.recordOutput("Coral/MotorTemperatures", temperaturesSignal.getValue().in(Celsius));
         Logger.recordOutput("Coral/MotorVoltage", voltageSignal.getValue());
     }

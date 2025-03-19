@@ -63,19 +63,23 @@ public class Observer extends Thread {
     }
 
     public static class ModuleObservationRaw {
-        public Measure<AngleUnit> position;
-        public Measure<AngularVelocityUnit> velocity;
-        public Measure<AngularAccelerationUnit> acceleration;
-        public Measure<CurrentUnit> current;
-        public Measure<VoltageUnit> appliedVoltage;
-        public Measure<AngleUnit> theta;
-        public Measure<AngularVelocityUnit> omega;
+        public Angle position;
+        public AngularVelocity velocity;
+        public AngularAcceleration acceleration;
+        public Current supplyCurrent;
+        public Current appliedCurrent;
+        public Voltage appliedVoltage;
+        public Voltage supplyVoltage;
+        public Angle theta;
+        public AngularVelocity omega;
 
         public ModuleObservationRaw() {
             position = Angle.ofBaseUnits(0,Radians);
             velocity = AngularVelocity.ofBaseUnits(0, RadiansPerSecond);
             acceleration = AngularAcceleration.ofBaseUnits(0, RadiansPerSecondPerSecond);
-            current = Current.ofBaseUnits(0,Amps);
+            supplyCurrent = Current.ofBaseUnits(0,Amps);
+            appliedCurrent = Amps.of(0);
+            supplyVoltage = Volts.of(0);
             appliedVoltage = Voltage.ofBaseUnits(0, Volts);
             theta = Angle.ofBaseUnits(0,Radians);
             omega = AngularVelocity.ofBaseUnits(0, RadiansPerSecond);
@@ -87,16 +91,20 @@ public class Observer extends Thread {
         public StatusSignal<Angle> positionSignal;
         public StatusSignal<AngularVelocity> velocitySignal;
         public StatusSignal<AngularAcceleration> accelerationSignal;
-        public StatusSignal<Current> currentSignal;
+        public StatusSignal<Current> supplyCurrentSignal;
+        public StatusSignal<Current> appliedCurrentSignal;
+        public StatusSignal<Voltage> supplyVoltageSignal;
         public StatusSignal<Voltage> appliedVoltageSignal;
         public StatusSignal<Angle> thetaSignal;
         public StatusSignal<AngularVelocity> omegaSignal;
 
-        public ModuleSignals(StatusSignal<Angle> positionSignal, StatusSignal<AngularVelocity> velocitySignal, StatusSignal<AngularAcceleration> accelerationSignal, StatusSignal<Current> currentSignal, StatusSignal<Voltage> appliedVoltageSignal, StatusSignal<Angle> thetaSignal, StatusSignal<AngularVelocity> omegaSignal) {
+        public ModuleSignals(StatusSignal<Angle> positionSignal, StatusSignal<AngularVelocity> velocitySignal, StatusSignal<AngularAcceleration> accelerationSignal, StatusSignal<Current> supplyCurrentSignal, StatusSignal<Current> appliedCurrentSignal, StatusSignal<Voltage> supplyVoltageSignal, StatusSignal<Voltage> appliedVoltageSignal, StatusSignal<Angle> thetaSignal, StatusSignal<AngularVelocity> omegaSignal) {
             this.positionSignal = positionSignal;
             this.velocitySignal = velocitySignal;
             this.accelerationSignal = accelerationSignal;
-            this.currentSignal = currentSignal;
+            this.supplyCurrentSignal = supplyCurrentSignal;
+            this.appliedCurrentSignal = appliedCurrentSignal;
+            this.supplyVoltageSignal = supplyVoltageSignal;
             this.appliedVoltageSignal = appliedVoltageSignal;
             this.thetaSignal = thetaSignal;
             this.omegaSignal = omegaSignal;
@@ -137,33 +145,42 @@ public class Observer extends Thread {
                 frontLeftSignals.positionSignal,
                 frontLeftSignals.velocitySignal,
                 frontLeftSignals.accelerationSignal,
-                frontLeftSignals.currentSignal,
-                frontLeftSignals.appliedVoltageSignal,
                 frontLeftSignals.thetaSignal,
                 frontLeftSignals.omegaSignal,
+                frontLeftSignals.supplyCurrentSignal,
+                frontLeftSignals.appliedCurrentSignal,
+                frontLeftSignals.supplyVoltageSignal,
+                frontLeftSignals.appliedVoltageSignal,
 
                 frontRightSignals.positionSignal,
                 frontRightSignals.velocitySignal,
                 frontRightSignals.accelerationSignal,
-                frontRightSignals.currentSignal,
-                frontRightSignals.appliedVoltageSignal,
                 frontRightSignals.thetaSignal,
                 frontRightSignals.omegaSignal,
+                frontRightSignals.supplyCurrentSignal,
+                frontRightSignals.appliedCurrentSignal,
+                frontRightSignals.supplyVoltageSignal,
+                frontRightSignals.appliedVoltageSignal,
 
                 backLeftSignals.positionSignal,
                 backLeftSignals.velocitySignal,
                 backLeftSignals.accelerationSignal,
-                backLeftSignals.currentSignal,
-                backLeftSignals.appliedVoltageSignal,
                 backLeftSignals.thetaSignal,
                 backLeftSignals.omegaSignal,
+                backLeftSignals.supplyCurrentSignal,
+                backLeftSignals.appliedCurrentSignal,
+                backLeftSignals.supplyVoltageSignal,
+                backLeftSignals.appliedVoltageSignal,
 
                 backRightSignals.positionSignal,
                 backRightSignals.velocitySignal,
                 backRightSignals.accelerationSignal,
-                backRightSignals.currentSignal,
                 backRightSignals.thetaSignal,
                 backRightSignals.omegaSignal,
+                backRightSignals.supplyCurrentSignal,
+                backRightSignals.appliedCurrentSignal,
+                backRightSignals.supplyVoltageSignal,
+                backRightSignals.appliedVoltageSignal,
 
                 yawSignal
         );
@@ -177,33 +194,42 @@ public class Observer extends Thread {
                     frontLeftSignals.positionSignal,
                     frontLeftSignals.velocitySignal,
                     frontLeftSignals.accelerationSignal,
-                    frontLeftSignals.currentSignal,
-                    frontLeftSignals.appliedVoltageSignal,
                     frontLeftSignals.thetaSignal,
                     frontLeftSignals.omegaSignal,
+                    frontLeftSignals.supplyCurrentSignal,
+                    frontLeftSignals.appliedCurrentSignal,
+                    frontLeftSignals.supplyVoltageSignal,
+                    frontLeftSignals.appliedVoltageSignal,
 
                     frontRightSignals.positionSignal,
                     frontRightSignals.velocitySignal,
                     frontRightSignals.accelerationSignal,
-                    frontRightSignals.currentSignal,
-                    frontRightSignals.appliedVoltageSignal,
                     frontRightSignals.thetaSignal,
                     frontRightSignals.omegaSignal,
+                    frontRightSignals.supplyCurrentSignal,
+                    frontRightSignals.appliedCurrentSignal,
+                    frontRightSignals.supplyVoltageSignal,
+                    frontRightSignals.appliedVoltageSignal,
 
                     backLeftSignals.positionSignal,
                     backLeftSignals.velocitySignal,
                     backLeftSignals.accelerationSignal,
-                    backLeftSignals.currentSignal,
-                    backLeftSignals.appliedVoltageSignal,
                     backLeftSignals.thetaSignal,
                     backLeftSignals.omegaSignal,
+                    backLeftSignals.supplyCurrentSignal,
+                    backLeftSignals.appliedCurrentSignal,
+                    backLeftSignals.supplyVoltageSignal,
+                    backLeftSignals.appliedVoltageSignal,
 
                     backRightSignals.positionSignal,
                     backRightSignals.velocitySignal,
                     backRightSignals.accelerationSignal,
-                    backRightSignals.currentSignal,
                     backRightSignals.thetaSignal,
                     backRightSignals.omegaSignal,
+                    backRightSignals.supplyCurrentSignal,
+                    backRightSignals.appliedCurrentSignal,
+                    backRightSignals.supplyVoltageSignal,
+                    backRightSignals.appliedVoltageSignal,
 
                     yawSignal
             );
@@ -245,13 +271,15 @@ public class Observer extends Thread {
 
     public ModuleObservationRaw SignalExtract(ModuleSignals signals) {
         ModuleObservationRaw raw = new ModuleObservationRaw();
-        raw.position = StatusSignal.getLatencyCompensatedValue(signals.positionSignal,signals.velocitySignal).copy();
-        raw.velocity = StatusSignal.getLatencyCompensatedValue(signals.velocitySignal,signals.accelerationSignal).copy();
-        raw.acceleration = signals.accelerationSignal.getValue().copy();
-        raw.current = signals.currentSignal.getValue().copy();
-        raw.appliedVoltage = signals.appliedVoltageSignal.getValue().copy();
-        raw.theta = StatusSignal.getLatencyCompensatedValue(signals.thetaSignal, signals.omegaSignal).copy();
-        raw.omega = signals.omegaSignal.getValue().copy();
+        raw.position = signals.positionSignal.getValue();
+        raw.velocity = signals.velocitySignal.getValue();
+        raw.acceleration = signals.accelerationSignal.getValue();
+        raw.appliedCurrent = signals.appliedCurrentSignal.getValue();
+        raw.supplyCurrent = signals.supplyCurrentSignal.getValue();
+        raw.supplyVoltage = signals.supplyVoltageSignal.getValue();
+        raw.appliedVoltage = signals.appliedVoltageSignal.getValue();
+        raw.theta = signals.thetaSignal.getValue();
+        raw.omega = signals.omegaSignal.getValue();
         return raw;
     }
 
