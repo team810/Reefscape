@@ -21,6 +21,8 @@ public class Robot extends LoggedRobot {
     public static final double PERIOD = .020;
     private final AutoFactory autoFactory;
 
+    private final PowerDistribution pdp = new PowerDistribution(1, PowerDistribution.ModuleType.kRev);
+
     public Robot()
     {
         super(PERIOD);
@@ -29,7 +31,6 @@ public class Robot extends LoggedRobot {
         if (isReal()) {
             Logger.addDataReceiver(new WPILOGWriter());
             Logger.addDataReceiver(new NT4Publisher());
-            new PowerDistribution(); // check the can id on the pdp
         } else {
             Logger.addDataReceiver(new WPILOGWriter());
             Logger.addDataReceiver(new NT4Publisher());
@@ -57,8 +58,8 @@ public class Robot extends LoggedRobot {
         System.out.println("J:" + FieldConstants.BlueReef.REEF_J);
         System.out.println("K:" + FieldConstants.BlueReef.REEF_K);
         System.out.println("L:" + FieldConstants.BlueReef.REEF_L);
-
-
+        System.out.println("RS" + FieldConstants.BlueReef.RIGHT_SOURCE);
+        System.out.println("RS" + FieldConstants.BlueReef.LEFT_SOURCE);
     }
 
     @Override
@@ -72,6 +73,8 @@ public class Robot extends LoggedRobot {
         Superstructure.getInstance().periodic();
         CommandScheduler.getInstance().run();
         writePeriodic();
+
+        Logger.recordOutput("PDP", pdp.getTotalCurrent());
     }
 
     public void readPeriodic() {

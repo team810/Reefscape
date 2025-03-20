@@ -131,7 +131,6 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
         positionalControlEnabled = false;
     }
 
-
     private void addVision(String cam) {
 
         if (Robot.isReal() && DrivetrainConstants.USING_VISION && !DriverStation.isDisabled())
@@ -248,6 +247,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
 
         Logger.recordOutput("Drivetrain/PositionalControl/targetPose", targetPose);
         Logger.recordOutput("Drivetrain/positionalControl", positionalControlEnabled);
+
 
     }
 

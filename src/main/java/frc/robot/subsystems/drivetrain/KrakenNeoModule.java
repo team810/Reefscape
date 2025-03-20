@@ -155,6 +155,7 @@ public class KrakenNeoModule implements SwerveModuleIO{
         Logger.recordOutput("Drivetrain/" + idString + "/" + "AppliedVelocityRPM", velocity);
         Logger.recordOutput("Drivetrain/" + idString + "/" + "Target Angle", targetAngle);
         Logger.recordOutput("Drivetrain/" + idString + "/" + "AppliedSteerVoltage", steerAppliedVoltage);
+        Logger.recordOutput("Drivetrain/" + idString + "/" + "SteerAppliedCurrent", steerMotor.getOutputCurrent());
     }
 
     @Override

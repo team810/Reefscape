@@ -85,7 +85,7 @@ public class ElevatorTalonFX implements ElevatorIO{
             config.Slot0.kP = 2.4;
             config.Slot0.kI = 0;
             config.Slot0.kD = .135;
-            config.Slot0.kS = .3;
+            config.Slot0.kS = .4;
             config.Slot0.kG = .5;
             config.Slot0.kV = .125;
             config.Slot0.kA = 0.01;

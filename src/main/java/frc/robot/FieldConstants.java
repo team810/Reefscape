@@ -36,17 +36,23 @@ public class FieldConstants {
         public static final Pose2d FR_LEFT = new Pose2d(3.72 ,2.55 , Rotation2d.fromDegrees(60));
 
 
-//        public static final Pose2d LEFT_SOURCE_TAG = new Pose2d(.851,7.4,Rotation2d.fromDegrees(126));
-//        public static final Pose2d RIGHT_SOURCE_TAG = new Pose2d(.851,.6553,Rotation2d.fromDegrees(-126));
-//        public static final Distance SOURCE_HORIZONTAL_OFFSET = Inches.of(16);
-//        public static final Distance SOURCE_VERTICAL_OFFSET = Inches.of(17.625 + 4.5);
+        public static final Pose2d LEFT_SOURCE_TAG = new Pose2d(.851,7.4,Rotation2d.fromDegrees(126));
+        public static final Pose2d RIGHT_SOURCE_TAG = new Pose2d(.851,.6553,Rotation2d.fromDegrees(-126));
+        public static final Distance SOURCE_HORIZONTAL_OFFSET = Inches.of(8.37 + 3);
+        public static final Distance SOURCE_VERTICAL_OFFSET = Inches.of(17.625 + 4);
 
-        public static final Pose2d LEFT_SOURCE = new Pose2d(1.24, 7.03, Rotation2d.fromDegrees(126));
-        public static final Pose2d RIGHT_SOURCE = new Pose2d(1.28, .96, Rotation2d.fromDegrees(-126));
+//        public static final Pose2d LEFT_SOURCE = new Pose2d(1.00, 6.82, Rotation2d.fromDegrees(126));
+//        public static final Pose2d RIGHT_SOURCE = new Pose2d(1.366, 1.01, Rotation2d.fromDegrees(-126));
+        public static final Pose2d LEFT_SOURCE = transform(LEFT_SOURCE_TAG, SOURCE_HORIZONTAL_OFFSET, SOURCE_VERTICAL_OFFSET);
+        public static final Pose2d RIGHT_SOURCE = transform(RIGHT_SOURCE_TAG, SOURCE_HORIZONTAL_OFFSET.unaryMinus(), SOURCE_VERTICAL_OFFSET);
 
+        public static final Distance STINGER_OFFSET = Meters.of(.23);
+        public static final Distance PIPE_OFFSET = Meters.of(0.225);
         public static final Distance LEFT_HORIZONTAL_OFFSET = Meters.of(.19 - .1641);
-        public static final Distance RIGHT_HORIZONTAL_OFFSET = Meters.of(.19 + .1641);
-        public static final Distance DEPTH_OFFSET = Inches.of(17.625 + 14); // The 17.625 is the size of the robot and the 14 is the distance back from the reef, both are in inches
+        public static final Distance RIGHT_HORIZONTAL_OFFSET = Meters.of(.19 + .1741);
+//        public static final Distance LEFT_HORIZONTAL_OFFSET = Meters.of(STINGER_OFFSET.in(Meters) - PIPE_OFFSET.in(Meters));
+//        public static final Distance RIGHT_HORIZONTAL_OFFSET = Meters.of(STINGER_OFFSET.in(Meters) + PIPE_OFFSET.in(Meters));
+        public static final Distance DEPTH_OFFSET = Inches.of(17.625+.25); // The 17.625 is the size of the robot and the 14 is the distance back from the reef, both are in inches
 
         // This would be if these are april tag locations
         public static final Pose2d CENTER_AB = new Pose2d(3.6576, 4.0259, Rotation2d.fromDegrees(0));
