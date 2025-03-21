@@ -128,7 +128,14 @@ public class Superstructure {
 
         new Trigger(IO.getButtonValue(Controls.ScoreCoral)).whileTrue(
                 new StartEndCommand(
-                        () -> {CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScore);},
+                        () -> {
+                            if (ElevatorState.L3 == ElevatorSubsystem.getInstance().getElevatorState() || ElevatorState.L2 == ElevatorSubsystem.getInstance().getElevatorState())
+                            {
+                                CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScoreMiddle);
+                            }else{
+                                CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScore);
+                            }
+                            },
                         () -> {CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Off);}
                 )
         );

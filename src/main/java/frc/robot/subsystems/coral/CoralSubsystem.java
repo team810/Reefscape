@@ -32,6 +32,7 @@ public class CoralSubsystem extends AdvancedSubsystem {
         motorStateMap.put(CoralMotorState.ReefScore, CoralConstants.REEF_SCORE_VOLTAGE);
         motorStateMap.put(CoralMotorState.TroughScore, CoralConstants.TROUGH_SCORE_VOLTAGE);
         motorStateMap.put(CoralMotorState.Hold, CoralConstants.HOLD_SCORE_VOLTAGE);
+        motorStateMap.put(CoralMotorState.ReefScoreMiddle,CoralConstants.REEF_SCORE_MIDDLE);
 
         pistonStateMap = new HashMap<>();
         pistonStateMap.put(CoralPistonState.Store, DoubleSolenoid.Value.kForward);

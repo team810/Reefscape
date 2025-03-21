@@ -18,7 +18,7 @@ public class AlgaeConstants {
     public static final Angle HOLD_ANGLE = Degrees.of(40);
     public static final Angle PROCESSOR_ANGLE = Degrees.of(0);
     public static final Angle GROUND_ANGLE = Degrees.of(-33.12);
-    public static final Angle REEF_ANGLE = Degrees.of(-33.12);
+    public static final Angle REEF_ANGLE = Degrees.of(-38);
     public static final Angle CORAL_ANGLE = Degrees.of(0);
     public static final Angle PIVOT_TOLERANCE = Degrees.of(.5);
     public static final Angle STARTING_ANGLE = Degrees.of(72);

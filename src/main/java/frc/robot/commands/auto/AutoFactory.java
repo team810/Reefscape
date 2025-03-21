@@ -415,17 +415,17 @@ public class AutoFactory {
         double actuatePistion = .1;
 
         autoCommand = new SequentialCommandGroup(
+                new InstantCommand(() ->{
+                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.AutoStore);
+                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
+                }),
                 new ParallelCommandGroup(
                         generateFollowTrajectoryCommand(part1),
-                        new InstantCommand(() ->{
-                            ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.AutoStore);
-                            CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
-                        }),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand( () ->
                                         (Math.abs(DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart1.getX()) < raiseElevatorDistance) &&
-                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart1.getX()) < raiseElevatorDistance) &&
-                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getRotation().getDegrees() - finalPosePart1.getRotation().getDegrees()) < 10)
+                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart1.getY()) < raiseElevatorDistance)
+
                                 ),
                                 new InstantCommand(() -> {
                                     ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L4);
@@ -465,8 +465,8 @@ public class AutoFactory {
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() ->
                                         (Math.abs(DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart3.getX()) < raiseElevatorDistance) &&
-                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart3.getY()) < raiseElevatorDistance) &&
-                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getRotation().getDegrees() - finalPosePart3.getRotation().getDegrees()) < 10)),
+                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart3.getY()) < raiseElevatorDistance)
+                                ),
                                 new InstantCommand(() -> {
                                     ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L4);
                                     CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Reef);
@@ -500,8 +500,7 @@ public class AutoFactory {
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() ->
                                         (Math.abs(DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart5.getX()) < raiseElevatorDistance) &&
-                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart5.getY()) < raiseElevatorDistance) &&
-                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getRotation().getDegrees() - finalPosePart5.getRotation().getDegrees()) < 10)
+                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart5.getY()) < raiseElevatorDistance)
                                 ),
                                 new InstantCommand(() ->{
                                     ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L4);

@@ -5,5 +5,6 @@ public enum CoralMotorState {
     Source,
     Hold,
     ReefScore,
+    ReefScoreMiddle,
     TroughScore
 }
