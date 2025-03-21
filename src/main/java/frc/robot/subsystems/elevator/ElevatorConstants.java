@@ -18,13 +18,13 @@ public class ElevatorConstants {
     public static final Angle L2_HEIGHT = Rotations.of(13.8);
     public static final Angle TROUGH_HEIGHT = Rotations.of(2.8);
     public static final Angle PROCESSOR_HEIGHT = Rotations.of(0);
-    public static final Angle ALGAE_HIGH_HEIGHT = Rotations.of(14.5);
-    public static final Angle ALGAE_MIDDLE_HEIGHT = Rotations.of(9);
+    public static final Angle ALGAE_HIGH_HEIGHT = Rotations.of(16.1);
+    public static final Angle ALGAE_MIDDLE_HEIGHT = Rotations.of(10.4);
     public static final Angle BARGE_HEIGHT = Rotations.of(26);
     public static final Angle STORE_CORAL_HEIGHT = Rotations.of(4);
     public static final Angle STORE_ALGAE_HEIGHT = Rotations.of(4);
     public static final Angle ALGAE_FLOOR = Rotations.of(.6);
-    public static final Angle ALGAE_CORAL = Rotations.of(1);
+    public static final Angle ALGAE_CORAL = Rotations.of(.8);
     public static final Angle PRE_STORE_HEIGHT = Rotations.of(4.5);
 
     public static final Angle AUTO_STORE_HEIGHT = Rotations.of(5);
