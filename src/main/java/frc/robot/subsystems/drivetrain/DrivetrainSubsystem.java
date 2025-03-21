@@ -155,7 +155,12 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
                     if(!reject)
                     {
                         visionPose = results.pose;
-                        odometry.addVisionMeasurement(visionPose, results.timestampSeconds);
+                        if (visionPose.getRotation().getCos() == 0 && visionPose.getRotation().getSin() == 0)
+                        {
+                            System.out.println("Stop");
+                        }else{
+                            odometry.addVisionMeasurement(visionPose, results.timestampSeconds);
+                        }
                     }
                 }
             }

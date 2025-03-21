@@ -18,7 +18,7 @@ public class CoralConstants {
     public static final Voltage REEF_SCORE_VOLTAGE = Voltage.ofBaseUnits(-8, Units.Volts);
     public static final Voltage REEF_SCORE_MIDDLE = Voltage.ofBaseUnits(-5, Units.Volts);
     public static final Voltage TROUGH_SCORE_VOLTAGE = Voltage.ofBaseUnits(-5, Units.Volts);
-    public static final Voltage HOLD_SCORE_VOLTAGE = Voltage.ofBaseUnits(2, Units.Volts);
+    public static final Voltage HOLD_SCORE_VOLTAGE = Voltage.ofBaseUnits(1.5, Units.Volts);
 
     public static final Rotation3d FWD_ANGLE = new Rotation3d(0,Math.toRadians(-55), 0);
     public static final Rotation3d REV_ANGLE = new Rotation3d(0,Math.toRadians(35), 0);
