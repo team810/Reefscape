@@ -21,7 +21,7 @@ public class SourceIntake extends Command {
     
     @Override
     public void end(boolean interrupted) {
-        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Off);
+        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
         CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Hold);
 
         ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);

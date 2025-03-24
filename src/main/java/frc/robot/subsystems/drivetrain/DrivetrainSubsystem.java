@@ -3,6 +3,7 @@ package frc.robot.subsystems.drivetrain;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.sim.Pigeon2SimState;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,7 +25,6 @@ import org.littletonrobotics.junction.Logger;
 import java.util.ArrayList;
 
 import static edu.wpi.first.units.Units.Radian;
-import static edu.wpi.first.units.Units.Radians;
 
 public class DrivetrainSubsystem extends AdvancedSubsystem {
     private static DrivetrainSubsystem instance;
@@ -67,6 +67,8 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
     private double yFeedForward;
     private double thetaFeedforward;
     private boolean positionalControlEnabled;
+
+
 
     private DrivetrainSubsystem() {
 
@@ -133,6 +135,8 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
 
     private void addVision(String cam) {
 
+
+
         if (Robot.isReal() && DrivetrainConstants.USING_VISION && !DriverStation.isDisabled())
         {
             boolean reject = false;
@@ -155,15 +159,28 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
                     if(!reject)
                     {
                         visionPose = results.pose;
-                        if (visionPose.getRotation().getCos() == 0 && visionPose.getRotation().getSin() == 0)
-                        {
-                            System.out.println("Stop");
-                        }else{
-                            odometry.addVisionMeasurement(visionPose, results.timestampSeconds);
+                        var xyStds = 1.5;
+
+                        xyStds = Math.sqrt((1.0/2.0 * (results.avgTagArea + .25))) - .15;
+
+//                        if (dist < 2.0) {
+//
+//                        }
+
+                        if (results.tagCount >= 2) {
+                            xyStds *= .4;
                         }
+
+
+                        odometry.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds,1800.0));
+
+                        odometry.addVisionMeasurement(visionPose, results.timestampSeconds);
+
+
                     }
                 }
             }
+
         }
     }
     @Override
@@ -179,6 +196,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
         addVision(DrivetrainConstants.LIME_LIGHT_SOURCE);
 
         ArrayList<Observer.SwerveObservation> observations = observer.getObservations();
+
         for (int i = 0; i < observations.size(); i++) {
             odometry.updateWithTime(
                     observations.get(i).timestamp,
@@ -259,8 +277,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
     @Override
     public void simulationPeriodic() {
 
-        if (Robot.isSimulation())
-        {
+        if (Robot.isSimulation()) {
             gyroSimState.addYaw(Units.radiansToDegrees(kinematics.toChassisSpeeds(frontLeft.getCurrentState(),frontRight.getCurrentState(),backLeft.getCurrentState(),backRight.getCurrentState()).omegaRadiansPerSecond * Robot.PERIOD));
         }
     
@@ -318,9 +335,9 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
         }else{
             resetPose(new Pose2d(getPose().getX(), getPose().getY(), Rotation2d.fromRadians(-Math.PI)));
         }
-        setImuMode(1);
+        setImuMode(0);
         resetLLGyro();
-        setImuMode(4);
+        setImuMode(0);
     }
 
     public void switchAlliances() {
@@ -425,6 +442,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
         LimelightHelpers.SetRobotOrientation(DrivetrainConstants.LIME_LIGHT_SOURCE, odometry.getEstimatedPosition().getRotation().getDegrees(), 0,0,0,0,0);
         LimelightHelpers.SetRobotOrientation(DrivetrainConstants.LIME_LIGHT_CORAL, odometry.getEstimatedPosition().getRotation().getDegrees(), 0,0,0,0,0);
 //        LimelightHelpers.SetRobotOrientation(DrivetrainConstants.LIME_LIGHT_ALGAE, odometry.getEstimatedPosition().getRotation().getDegrees(),0,0,0,0,0);
+
     }
 
     /**

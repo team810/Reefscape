@@ -29,7 +29,7 @@ public class AlgaeConstants {
     public static final Distance LASER_TOLERANCE = Inches.of(.5);
     public static final Distance LASER_EXPECTED = Inches.of(3.25);
 
-    public static final Voltage INTAKE_VOLTAGE = Volts.of(-12);
+    public static final Voltage INTAKE_VOLTAGE = Volts.of(-10);
     public static final Voltage BARGE_VOLTAGE = Volts.of(12);
     public static final Voltage PROCESSOR_VOLTAGE = Volts.of(5);
     public static final Voltage HOLD_VOLTAGE = Volts.of(0);

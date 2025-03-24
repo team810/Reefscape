@@ -16,6 +16,7 @@ import frc.robot.commands.SourceIntake;
 import frc.robot.subsystems.algae.AlgaeDriveStates;
 import frc.robot.subsystems.algae.AlgaePivotStates;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
+import frc.robot.subsystems.coral.CoralConstants;
 import frc.robot.subsystems.coral.CoralMotorState;
 import frc.robot.subsystems.coral.CoralPistonState;
 import frc.robot.subsystems.coral.CoralSubsystem;
@@ -132,6 +133,8 @@ public class Superstructure {
                             if (ElevatorState.L3 == ElevatorSubsystem.getInstance().getElevatorState() || ElevatorState.L2 == ElevatorSubsystem.getInstance().getElevatorState())
                             {
                                 CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScoreMiddle);
+                            } else if (ElevatorState.Trough == ElevatorSubsystem.getInstance().getElevatorState()) {
+                                CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.TroughScore);
                             }else{
                                 CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScore);
                             }

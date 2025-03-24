@@ -408,7 +408,7 @@ public class AutoFactory {
         Pose2d finalPosePart5 = part5.getFinalPose(false).orElse(new Pose2d(-5,-5,new Rotation2d()));
         DrivetrainSubsystem.getInstance().resetPose(part1.getInitialPose(false).get());
 
-        double raiseElevatorDistance = .5;
+        double raiseElevatorDistance = .3;
         double heightBeforeMove = 15;
         double delayBeforeShooting = 0;
         double delayBeforeGoingDown = .1;
