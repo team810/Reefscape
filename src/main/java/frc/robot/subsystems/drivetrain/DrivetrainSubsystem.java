@@ -171,12 +171,8 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
                             xyStds *= .4;
                         }
 
-
                         odometry.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds,1800.0));
-
                         odometry.addVisionMeasurement(visionPose, results.timestampSeconds);
-
-
                     }
                 }
             }
