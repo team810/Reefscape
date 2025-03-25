@@ -242,9 +242,9 @@ public class ManualDriveCommand extends Command {
             DrivetrainSubsystem.getInstance().setVelocityRR(speeds);
             DrivetrainSubsystem.getInstance().setControlMode(DrivetrainSubsystem.ControlMethods.VelocityRR);
         }else {
-
             if (!(left || right || leftSourceB || rightSourceB)) {
                 // Manual drive
+                LedUtil.getInstance().setState(LedState.DRIVING);
                 double verticalVelocity;
                 double horizontalVelocity;
 
@@ -351,6 +351,12 @@ public class ManualDriveCommand extends Command {
                 DrivetrainSubsystem.getInstance().setTargetPoseLog(targetPose, targetPose.getX(), targetPose.getY(), targetPose.getRotation().getRadians(), xOutput, yOutput, omegaOutput, xAlignController.atSetpoint(), yAlignController.atSetpoint(), omegaAlignController.atSetpoint());
                 DrivetrainSubsystem.getInstance().setPositionalControl(true);
 
+                if (MathUtil.applyDeadband(xOutput, .1) == 0 && MathUtil.applyDeadband(yOutput, .1) == 0 && MathUtil.applyDeadband(omegaOutput, .1) == 0) {
+                    LedUtil.getInstance().setState(LedState.GOOD);
+                }else{
+                    LedUtil.getInstance().setState(LedState.AUTO);
+                }
+
                 ChassisSpeeds speeds = new ChassisSpeeds(xOutput, yOutput, omegaOutput);
 
                 DrivetrainSubsystem.getInstance().setVelocityFOC(speeds);
@@ -370,9 +376,9 @@ public class ManualDriveCommand extends Command {
                 double omegaOutput = omegaAlignController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
                 if ((MathUtil.applyDeadband(xOutput, .1) == 0) & (MathUtil.applyDeadband(yOutput,.1) == 0) & (MathUtil.applyDeadband(omegaOutput, .4) == 0) & ElevatorSubsystem.getInstance().atSetpoint() & ElevatorSubsystem.getInstance().getElevatorState() == ElevatorState.Source) {
-                    LedUtil.getInstance().setState(LedState.THROW);
+                    LedUtil.getInstance().setState(LedState.GOOD);
                 }else{
-                    LedUtil.getInstance().setState(LedState.ALIGNING);
+                    LedUtil.getInstance().setState(LedState.AUTO);
                 }
 
                 DrivetrainSubsystem.getInstance().setTargetPoseLog(targetPose, targetPose.getX(), targetPose.getY(), targetPose.getRotation().getRadians(), xOutput, yOutput, omegaOutput, xAlignController.atSetpoint(), yAlignController.atSetpoint(), omegaAlignController.atSetpoint());
