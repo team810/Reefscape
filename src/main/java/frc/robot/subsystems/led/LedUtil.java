@@ -16,7 +16,7 @@ public class LedUtil {
         led.setColorOrder(AddressableLED.ColorOrder.kRBG);
         led.setData(buffer);
         led.start();
-        setState(LedState.ALIGNING);
+        setState(LedState.DRIVING);
     }
 
     public void setState(LedState state) {
@@ -26,11 +26,14 @@ public class LedUtil {
         b = 0;
 
         switch(state) {
-            case ALIGNING -> {
+            case AUTO -> {
                 b = 255;
             }
-            case THROW -> {
+            case GOOD -> {
                 r = 255;
+            }
+            case DRIVING -> {
+                g = 255;
             }
         }
         for (int i = 0; i < 190; i++) {
