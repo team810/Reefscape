@@ -14,6 +14,7 @@ import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.*;
@@ -27,6 +28,8 @@ public class CoralTalonFX implements CoralIO {
     private final StatusSignal<Temperature> temperaturesSignal;
     private final StatusSignal<Current> appliedCurrentSignal;
     private final StatusSignal<Current> supplyCurrentSignal;
+
+    private double testVoltage;
 
 //    private final CANrange sensor;
 //    private final StatusSignal<Distance> laserDistance;

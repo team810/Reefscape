@@ -44,7 +44,7 @@ public class DrivetrainConstants {
     public static final double WHEEL_BASE_WIDTH = Units.inchesToMeters(24); // measure of FL wheel to FR wheel or BL wheel to BR wheel
     public static final double WHEEL_BASE_LENGTH = Units.inchesToMeters(24); // measure of FL wheel to BL wheel// or FR wheel to BR wheel
 
-    public static final double STEER_KP = 3; // voltage/radians proportion of volts to error in radians
+    public static final double STEER_KP = 2.75; // voltage/radians proportion of volts to error in radians
     public static final double STEER_KI = 0;
     public static final double STEER_KD = 0;
     public static final double STEER_KS = 0; // output needed to overcome static friction

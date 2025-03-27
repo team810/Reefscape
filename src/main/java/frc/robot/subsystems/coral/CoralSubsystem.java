@@ -4,10 +4,14 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.lib.AdvancedSubsystem;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.HashMap;
+
+import static edu.wpi.first.units.Units.Volts;
 
 public class CoralSubsystem extends AdvancedSubsystem {
     private static CoralSubsystem instance;
@@ -22,12 +26,15 @@ public class CoralSubsystem extends AdvancedSubsystem {
     private Voltage currentVoltageTarget;
     private DoubleSolenoid.Value currentPistonTarget;
 
+    double testVoltage = 0;
+
     private CoralSubsystem() {
+
         motorState = CoralMotorState.Off;
         pistonState = CoralPistonState.Store;
 
         motorStateMap = new HashMap<>();
-        motorStateMap.put(CoralMotorState.Off, Voltage.ofBaseUnits(0, Units.Volts));
+        motorStateMap.put(CoralMotorState.Off, Voltage.ofBaseUnits(0, Volts));
         motorStateMap.put(CoralMotorState.Source, CoralConstants.SOURCE_VOLTAGE);
         motorStateMap.put(CoralMotorState.ReefScore, CoralConstants.REEF_SCORE_VOLTAGE);
         motorStateMap.put(CoralMotorState.TroughScore, CoralConstants.TROUGH_SCORE_VOLTAGE);
@@ -43,6 +50,8 @@ public class CoralSubsystem extends AdvancedSubsystem {
 
         io = new CoralTalonFX();
         currentPistonTarget = io.getPistonState();
+
+        SmartDashboard.putNumber("TestVoltage", testVoltage);
     }
 
     @Override
@@ -51,6 +60,8 @@ public class CoralSubsystem extends AdvancedSubsystem {
 
         Logger.recordOutput("Coral/CoralPistonState", pistonState);
         Logger.recordOutput("Coral/CoralMotorState", motorState);
+
+        testVoltage = SmartDashboard.getNumber("TestVoltage", testVoltage);
     }
 
     @Override
@@ -83,7 +94,11 @@ public class CoralSubsystem extends AdvancedSubsystem {
     public void setCoralMotorState(CoralMotorState motorState) {
         this.motorState = motorState;
         this.currentVoltageTarget = motorStateMap.get(this.motorState);
-        this.io.setVoltage(currentVoltageTarget);
+        if (motorState == CoralMotorState.ReefScoreMiddle || motorState == CoralMotorState.ReefTrough || motorState == CoralMotorState.ReefScore) {
+            this.io.setVoltage(Volts.of(-5));
+        }else{
+            this.io.setVoltage(currentVoltageTarget);
+        }
     }
 
     public CoralPistonState getCoralPistonState() {

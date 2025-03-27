@@ -13,6 +13,7 @@ public class CoralConstants {
     public static final int PISTON_FWD_CHANNEL = 2;
     public static final int PISTON_REV_CHANNEL= 3;
 
+
     public static final double LASER_EXPECTED = 1.0; // This is the expected output from the laser if the coral is detected
     public static final double LASER_TOLERANCE = 0.05;
 

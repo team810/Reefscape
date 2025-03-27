@@ -42,7 +42,7 @@ public class FieldConstants {
         public static final Distance SOURCE_VERTICAL_OFFSET = Inches.of(17.625 + 4);
 
         public static final Pose2d LEFT_SOURCE = new Pose2d(1.02, 6.85, Rotation2d.fromDegrees(126));
-        public static final Pose2d RIGHT_SOURCE = new Pose2d(1.2857701778411865 , 0.9916911721229553  , Rotation2d.fromDegrees(-126));
+        public static final Pose2d RIGHT_SOURCE = new Pose2d(1.2557573318481445  , .96  , Rotation2d.fromDegrees(-126));
 //        public static final Pose2d LEFT_SOURCE = transform(LEFT_SOURCE_TAG, SOURCE_HORIZONTAL_OFFSET, SOURCE_VERTICAL_OFFSET);
 //        public static final Pose2d RIGHT_SOURCE = transform(RIGHT_SOURCE_TAG, SOURCE_HORIZONTAL_OFFSET, SOURCE_VERTICAL_OFFSET);
 

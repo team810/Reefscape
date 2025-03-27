@@ -66,8 +66,8 @@ public abstract class IO {
 //
         controlsButtons.put(Controls.AlgaeIntakeReefHigh, () -> secondary.getRawAxis(0) == 1);
         controlsButtons.put(Controls.AlgaeIntakeReefLow, () -> secondary.getRawAxis(0) == -1);
-        controlsButtons.put(Controls.AlgaeIntakeCoral, () -> secondary.getRawAxis(1) == 1 || secondary.getRawAxis(1) == -1);
-        controlsButtons.put(Controls.AlgaeIntakeGround, () -> false);
+        controlsButtons.put(Controls.AlgaeIntakeCoral, () -> secondary.getRawAxis(1) == 1);
+        controlsButtons.put(Controls.AlgaeIntakeGround, () -> secondary.getRawAxis(1) == -1);
         controlsButtons.put(Controls.BargePosition, () -> secondary.getRawButton(10));
         controlsButtons.put(Controls.ProcessorPosition, () -> secondary.getRawButton(9));
         controlsButtons.put(Controls.Source, () -> secondary.getRawButton(1));

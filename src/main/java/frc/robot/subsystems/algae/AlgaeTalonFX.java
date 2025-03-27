@@ -46,9 +46,6 @@ public class AlgaeTalonFX implements AlgaeIO {
     private final StatusSignal<Current> driveAppliedCurrentSignal;
     private final StatusSignal<Current> driveSupplyCurrentSignal;
 
-    private final CANrange laser;
-    private final StatusSignal<Distance> distanceSignal;
-    private final StatusSignal<Boolean> detectedSignal;
 
     public AlgaeTalonFX() {
         pivotMotor = new TalonFX(AlgaeConstants.PIVOT_MOTOR_ID, AlgaeConstants.CANBUS);
@@ -140,15 +137,6 @@ public class AlgaeTalonFX implements AlgaeIO {
         driveAppliedCurrentSignal = driveMotor.getStatorCurrent();
         driveSupplyCurrentSignal = driveMotor.getSupplyCurrent();
 
-        laser = new CANrange(AlgaeConstants.LASER_ID, AlgaeConstants.CANBUS);
-        CANrangeConfiguration laserConfig = new CANrangeConfiguration();
-        laserConfig.ToFParams.UpdateMode = UpdateModeValue.ShortRange100Hz;
-        laserConfig.FovParams.FOVRangeX = 6.75;
-        laserConfig.FovParams.FOVRangeY = 6.75;
-        laserConfig.FutureProofConfigs = true;
-        laser.getConfigurator().apply(laserConfig);
-        distanceSignal = laser.getDistance();
-        detectedSignal = laser.getIsDetected();
     }
 
     @Override
@@ -159,9 +147,6 @@ public class AlgaeTalonFX implements AlgaeIO {
                 pivotTemperatureSignal,
                 pivotVoltageSignal,
                 pivotAppliedCurrentSignal,
-
-                distanceSignal,
-                detectedSignal,
 
                 driveVoltageSignal,
                 driveTemperatureSignal,
@@ -176,8 +161,7 @@ public class AlgaeTalonFX implements AlgaeIO {
         Logger.recordOutput("Algae/Pivot/Voltage", pivotVoltageSignal.getValue());
         Logger.recordOutput("Algae/Pivot/AppliedCurrent", pivotAppliedCurrentSignal.getValue());
 
-        Logger.recordOutput("Algae/Laser/RawValue", distanceSignal.getValue().in(Inches));
-        Logger.recordOutput("Algae/Laser/DetectedAlgae", hasAlgae());
+
 
         Logger.recordOutput("Algae/Drive/Voltage", driveVoltageSignal.getValue());
         Logger.recordOutput("Algae/Drive/Current", driveAppliedCurrentSignal.getValue());

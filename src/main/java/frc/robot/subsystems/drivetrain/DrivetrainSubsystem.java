@@ -7,6 +7,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -68,7 +69,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
     private double thetaFeedforward;
     private boolean positionalControlEnabled;
 
-
+    private final ArrayList<LimelightHelpers.PoseEstimate> visionResults = new ArrayList<>();
 
     private DrivetrainSubsystem() {
 
@@ -134,49 +135,54 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
     }
 
     private void addVision(String cam) {
-
-
-
-        if (Robot.isReal() && DrivetrainConstants.USING_VISION && !DriverStation.isDisabled())
+        if (Robot.isReal())
         {
-            boolean reject = false;
             LimelightHelpers.PoseEstimate results;
             LimelightHelpers.SetRobotOrientation(cam, odometry.getEstimatedPosition().getRotation().getDegrees(),0,0, 0, 0, 0);
             results = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cam);
 
-            if (results != null) {
+            if (results != null)
+            {
+                visionResults.add(results);
+            }
 
-                if (results.avgTagArea > .01)
-                {
-                    if(Math.abs(getRate().in(edu.wpi.first.units.Units.RadiansPerSecond)) > DrivetrainConstants.MAX_ANGULAR_VELOCITY_ACCEPT_VISION_DATA)
-                    {
-                        reject = true;
-                    }
-                    if(results.tagCount == 0)
-                    {
-                        reject = true;
-                    }
-                    if(!reject)
-                    {
-                        visionPose = results.pose;
-                        var xyStds = 1.5;
+            if (DrivetrainConstants.USING_VISION && !DriverStation.isDisabled())
+            {
+                boolean reject = false;
+                if (results != null) {
 
-                        xyStds = Math.sqrt((1.0/2.0 * (results.avgTagArea + .25))) - .15;
+                    if (results.avgTagArea > .01)
+                    {
+                        if(Math.abs(getRate().in(edu.wpi.first.units.Units.RadiansPerSecond)) > DrivetrainConstants.MAX_ANGULAR_VELOCITY_ACCEPT_VISION_DATA)
+                        {
+                            reject = true;
+                        }
+                        if(results.tagCount == 0)
+                        {
+                            reject = true;
+                        }
+                        if(!reject)
+                        {
+                            visionPose = results.pose;
+                            var xyStds = 1.5;
+
+                            xyStds = Math.sqrt((1.0/2.0 * (results.avgTagArea + .25))) - .15;
 
 //                        if (dist < 2.0) {
 //
 //                        }
 
-                        if (results.tagCount >= 2) {
-                            xyStds *= .4;
-                        }
+                            if (results.tagCount >= 2) {
+                                xyStds *= .4;
+                            }
 
-                        odometry.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds,1800.0));
-                        odometry.addVisionMeasurement(visionPose, results.timestampSeconds);
+                            odometry.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds,1800.0));
+                            odometry.addVisionMeasurement(visionPose, results.timestampSeconds);
+                        }
                     }
                 }
-            }
 
+            }
         }
     }
     @Override
@@ -186,6 +192,8 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
         frontRight.readPeriodic(moduleObservations[1]);
         backLeft.readPeriodic(moduleObservations[2]);
         backRight.readPeriodic(moduleObservations[3]);
+
+        visionResults.clear();
 
         addVision(DrivetrainConstants.LIME_LIGHT_REEFG);
         addVision(DrivetrainConstants.LIME_LIGHT_CORAL);
@@ -208,6 +216,11 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
 
         currentStates = new SwerveModuleState[]{frontLeft.getCurrentState(), frontRight.getCurrentState(), backLeft.getCurrentState(), backRight.getCurrentState()};
 
+        Pose2d[] estimatedPose = new Pose2d[] {new Pose2d(), new Pose2d(), new Pose2d()};
+        for (int i = 0; i < visionResults.size(); i++) {
+            estimatedPose[i] = visionResults.get(i).pose;
+        }
+        Logger.recordOutput("Pose", estimatedPose);
         Logger.recordOutput("RobotPose", getPose());
         Logger.recordOutput("Drivetrain/CurrentModuleStates", currentStates);
         Logger.recordOutput("Drivetrain/CurrentSpeeds", getCurrentSpeeds());
