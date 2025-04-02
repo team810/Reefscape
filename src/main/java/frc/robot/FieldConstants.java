@@ -52,7 +52,7 @@ public class FieldConstants {
         public static final Distance RIGHT_HORIZONTAL_OFFSET = Meters.of(.19 + .1741);
 //        public static final Distance LEFT_HORIZONTAL_OFFSET = Meters.of(STINGER_OFFSET.in(Meters) - PIPE_OFFSET.in(Meters));
 //        public static final Distance RIGHT_HORIZONTAL_OFFSET = Meters.of(STINGER_OFFSET.in(Meters) + PIPE_OFFSET.in(Meters));
-        public static final Distance DEPTH_OFFSET = Inches.of(17.625 + 14); // The 17.625 is the size of the robot and the 14 is the distance back from the reef, both are in inches
+        public static final Distance DEPTH_OFFSET = Inches.of(17.625 + 8); // The 17.625 is the size of the robot and the 14 is the distance back from the reef, both are in inches
 
         // This would be if these are april tag locations
         public static final Pose2d CENTER_AB = new Pose2d(3.6576, 4.0259, Rotation2d.fromDegrees(0));
@@ -62,7 +62,7 @@ public class FieldConstants {
         public static final Pose2d CENTER_IJ = new Pose2d(4.9074, 4.754, Rotation2d.fromDegrees(-120));
         public static final Pose2d CENTER_KL = new Pose2d(4.0739,4.754, Rotation2d.fromDegrees(-60));
 
-        public static final Pose2d REEF_A = transform(CENTER_AB, LEFT_HORIZONTAL_OFFSET,DEPTH_OFFSET);
+        public static final Pose2d REEF_A = new Pose2d(3,4,new Rotation2d());
         public static final Pose2d REEF_B = transform(CENTER_AB, RIGHT_HORIZONTAL_OFFSET,DEPTH_OFFSET);
         public static final Pose2d REEF_C = transform(CENTER_CD, LEFT_HORIZONTAL_OFFSET,DEPTH_OFFSET);
         public static final Pose2d REEF_D = transform(CENTER_CD, RIGHT_HORIZONTAL_OFFSET,DEPTH_OFFSET);

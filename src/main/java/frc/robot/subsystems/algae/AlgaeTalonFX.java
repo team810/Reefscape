@@ -69,8 +69,8 @@ public class AlgaeTalonFX implements AlgaeIO {
 
         pivotMotorConfig.Feedback.SensorToMechanismRatio = 64; // 64 to 1 gear box
 
-        pivotMotorConfig.Voltage.PeakForwardVoltage = 8;
-        pivotMotorConfig.Voltage.PeakReverseVoltage = -8;
+        pivotMotorConfig.Voltage.PeakForwardVoltage = 4;
+        pivotMotorConfig.Voltage.PeakReverseVoltage = -4;
 
         pivotMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 100;
         pivotMotorConfig.MotionMagic.MotionMagicAcceleration = 400;

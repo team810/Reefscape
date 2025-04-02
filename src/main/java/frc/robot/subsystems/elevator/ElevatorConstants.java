@@ -13,7 +13,7 @@ public class ElevatorConstants {
     public static final double CONVERSION_FACTOR = 2.751; // rotations/in
 
     public static final Angle SOURCE_HEIGHT = Rotations.of(6.1);
-    public static final Angle L4_HEIGHT = Rotations.of(27.5);
+    public static final Angle L4_HEIGHT = Rotations.of(27.35);
     public static final Angle L3_HEIGHT = Rotations.of(18.4);
     public static final Angle L2_HEIGHT = Rotations.of(12.65);
     public static final Angle TROUGH_HEIGHT = Rotations.of(2.8);
@@ -24,7 +24,7 @@ public class ElevatorConstants {
     public static final Angle STORE_CORAL_HEIGHT = Rotations.of(4);
     public static final Angle STORE_ALGAE_HEIGHT = Rotations.of(4);
     public static final Angle ALGAE_FLOOR = Rotations.of(0);
-    public static final Angle ALGAE_CORAL = Rotations.of(.6);
+    public static final Angle ALGAE_CORAL = Rotations.of(0);
     public static final Angle PRE_STORE_HEIGHT = Rotations.of(4.5);
 
     public static final Angle AUTO_STORE_HEIGHT = Rotations.of(5);

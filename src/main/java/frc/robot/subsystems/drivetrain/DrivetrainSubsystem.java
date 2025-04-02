@@ -166,7 +166,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
                             visionPose = results.pose;
                             var xyStds = 1.5;
 
-                            xyStds = Math.sqrt((1.0/2.0 * (results.avgTagArea + .25))) - .15;
+                            xyStds = Math.sqrt((.6 * (results.avgTagArea + .25))) - .15;
 
 //                        if (dist < 2.0) {
 //

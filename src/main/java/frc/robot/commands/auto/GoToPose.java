@@ -1,5 +1,6 @@
 package frc.robot.commands.auto;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,8 +14,12 @@ public class GoToPose extends Command {
     private final PIDController thetaController;
 
     private final Pose2d finalPose;
+    private final double maxSpeed;
+    private final double maxRot;
 
-    public GoToPose(Pose2d finalPose) {
+    public GoToPose(Pose2d finalPose, double maxSpeed, double maxRot) {
+        this.maxSpeed = maxSpeed;
+        this.maxRot = maxRot;
         xController = new PIDController(5,0,0);
         yController = new PIDController(5,0,0);
         thetaController = new PIDController(5,0,0);
@@ -35,9 +40,9 @@ public class GoToPose extends Command {
     public void execute() {
         Pose2d currentPose = DrivetrainSubsystem.getInstance().getPose();
 
-        double xOutput = xController.calculate(currentPose.getX(),finalPose.getX());
-        double yOutput = yController.calculate(currentPose.getY(), finalPose.getY());
-        double theta = thetaController.calculate(currentPose.getRotation().getRadians(), finalPose.getRotation().getRadians());
+        double xOutput = MathUtil.clamp(xController.calculate(currentPose.getX(),finalPose.getX()), -maxSpeed, maxSpeed);
+        double yOutput = MathUtil.clamp(yController.calculate(currentPose.getY(), finalPose.getY()), -maxSpeed, maxSpeed);
+        double theta = MathUtil.clamp(thetaController.calculate(currentPose.getRotation().getRadians(), finalPose.getRotation().getRadians()), -maxRot, maxRot);
 
         double linearVelocity = Math.sqrt((xOutput * xOutput) + (yOutput * yOutput));
         Rotation2d heading = new Rotation2d(xOutput, yOutput);

@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Superstructure;
 import frc.robot.commands.CommandFactory;
+import frc.robot.subsystems.algae.AlgaeDriveStates;
+import frc.robot.subsystems.algae.AlgaePivotStates;
+import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.coral.CoralMotorState;
 import frc.robot.subsystems.coral.CoralPistonState;
 import frc.robot.subsystems.coral.CoralSubsystem;
@@ -410,11 +413,127 @@ public class AutoFactory {
 
         double raiseElevatorDistance = .3;
         double heightBeforeMove = 15;
-        double delayBeforeShooting = 0;
-        double delayBeforeGoingDown = .1;
+        double delayBeforeShooting = .25;
+        double delayBeforeGoingDown = .25;
         double actuatePistion = .1;
 
-        autoCommand = new SequentialCommandGroup(
+        boolean centerAuto = false;
+        if (!centerAuto) {
+            // Not center auto
+            autoCommand = new SequentialCommandGroup(
+                    new InstantCommand(() ->{
+                        ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.AutoStore);
+                        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
+                    }),
+                    new ParallelCommandGroup(
+                            generateFollowTrajectoryCommand(part1),
+                            new SequentialCommandGroup(
+                                    new WaitUntilCommand( () ->
+                                            (Math.abs(DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart1.getX()) < raiseElevatorDistance) &&
+                                                    (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart1.getY()) < raiseElevatorDistance)
+
+                                    ),
+                                    new InstantCommand(() -> {
+                                        ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L4);
+                                        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
+                                        CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Reef);
+                                    })
+                            )
+                    ),
+                    new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().atSetpoint()),
+                    new WaitCommand(delayBeforeShooting),
+                    new InstantCommand(() -> {
+                        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScore);
+                    }),
+                    new WaitCommand(delayBeforeGoingDown),
+                    new InstantCommand(() -> {
+                        CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Source);
+                        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Source);
+                        ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);
+                    }),
+                    new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().getCurrentHeight().in(Units.Inches) < heightBeforeMove),
+                    new ParallelCommandGroup(
+                            generateFollowTrajectoryCommand(part2), // Moving from scoring location to source
+                            new SequentialCommandGroup(
+                                    new WaitCommand(1),
+                                    new InstantCommand(() -> {ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.Source);})
+                            )
+                    ),
+                    new WaitUntilCommand(() -> CoralSubsystem.getInstance().hasCoral()),
+                    new InstantCommand(() -> {ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);}),
+                    new InstantCommand(() -> {
+                        ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);
+                        CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Hold);
+                        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
+                    }),
+                    new ParallelCommandGroup(
+                            generateFollowTrajectoryCommand(part3),
+                            new SequentialCommandGroup(
+                                    new WaitUntilCommand(() ->
+                                            (Math.abs(DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart3.getX()) < raiseElevatorDistance) &&
+                                                    (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart3.getY()) < raiseElevatorDistance)
+                                    ),
+                                    new InstantCommand(() -> {
+                                        ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L4);
+                                        CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Reef);
+                                        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
+                                    })
+                            )
+                    ),
+                    new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().atSetpoint()),
+                    new WaitCommand(delayBeforeShooting),
+                    new InstantCommand(() -> {
+                        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScore);
+                    }),
+                    new WaitCommand(actuatePistion),
+                    new InstantCommand(() -> {
+                        ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);
+                        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Source);
+                        CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Source);
+                    }),
+                    new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().getCurrentHeight().in(Units.Inches) < heightBeforeMove),
+                    new ParallelCommandGroup(
+                            new FollowTrajectory(part4),
+                            new SequentialCommandGroup(
+                                    new WaitCommand(1),
+                                    new InstantCommand(() -> {ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.Source);})
+                            )
+                    ),
+                    new WaitUntilCommand(() -> CoralSubsystem.getInstance().hasCoral()),
+                    new InstantCommand(() -> {ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);}),
+                    new ParallelCommandGroup(
+                            generateFollowTrajectoryCommand(part5),
+                            new SequentialCommandGroup(
+                                    new WaitUntilCommand(() ->
+                                            (Math.abs(DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart5.getX()) < raiseElevatorDistance) &&
+                                                    (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart5.getY()) < raiseElevatorDistance)
+                                    ),
+                                    new InstantCommand(() ->{
+                                        ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L4);
+                                        CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Reef);
+                                        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
+                                    })
+                            )
+                    ),
+                    new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().atSetpoint()),
+                    new WaitCommand(delayBeforeShooting),
+                    new InstantCommand(() -> {
+                        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScore);
+                    }),
+                    new WaitCommand(delayBeforeGoingDown),
+                    new InstantCommand(() -> {
+                        ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);
+                        CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Off);
+                        CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Store);
+                    })
+            );
+        }else{
+            Pose2d algaeIntakePose = new Pose2d(5.78, 4.01, Rotation2d.fromDegrees(90));
+            Pose2d backOffPose = new Pose2d(6.1403, 4.01, Rotation2d.fromDegrees(180));
+            Pose2d backOffWithRot = new Pose2d(6.1403, 4.01, Rotation2d.fromDegrees(90));
+
+            // Center auto
+            autoCommand = new SequentialCommandGroup(
                 new InstantCommand(() ->{
                     ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.AutoStore);
                     CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
@@ -424,7 +543,7 @@ public class AutoFactory {
                         new SequentialCommandGroup(
                                 new WaitUntilCommand( () ->
                                         (Math.abs(DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart1.getX()) < raiseElevatorDistance) &&
-                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart1.getY()) < raiseElevatorDistance)
+                                                (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart1.getY()) < raiseElevatorDistance)
 
                                 ),
                                 new InstantCommand(() -> {
@@ -442,85 +561,22 @@ public class AutoFactory {
                 new WaitCommand(delayBeforeGoingDown),
                 new InstantCommand(() -> {
                     CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Source);
-                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Source);
-                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);
-                }),
-                new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().getCurrentHeight().in(Units.Inches) < heightBeforeMove),
-                new ParallelCommandGroup(
-                        generateFollowTrajectoryCommand(part2), // Moving from scoring location to source
-                        new SequentialCommandGroup(
-                                new WaitCommand(1),
-                                new InstantCommand(() -> {ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.Source);})
-                        )
-                ),
-                new WaitUntilCommand(() -> CoralSubsystem.getInstance().hasCoral()),
-                new InstantCommand(() -> {ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);}),
-                new InstantCommand(() -> {
-                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);
-                    CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Hold);
-                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
-                }),
-                new ParallelCommandGroup(
-                        generateFollowTrajectoryCommand(part3),
-                        new SequentialCommandGroup(
-                                new WaitUntilCommand(() ->
-                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart3.getX()) < raiseElevatorDistance) &&
-                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart3.getY()) < raiseElevatorDistance)
-                                ),
-                                new InstantCommand(() -> {
-                                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L4);
-                                    CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Reef);
-                                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
-                                })
-                        )
-                ),
-                new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().atSetpoint()),
-                new WaitCommand(delayBeforeShooting),
-                new InstantCommand(() -> {
-                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScore);
-                }),
-                new WaitCommand(actuatePistion),
-                new InstantCommand(() -> {
-                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);
-                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Source);
-                    CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Source);
-                }),
-                new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().getCurrentHeight().in(Units.Inches) < heightBeforeMove),
-                new ParallelCommandGroup(
-                        new FollowTrajectory(part4),
-                        new SequentialCommandGroup(
-                                new WaitCommand(1),
-                                new InstantCommand(() -> {ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.Source);})
-                        )
-                ),
-                new WaitUntilCommand(() -> CoralSubsystem.getInstance().hasCoral()),
-                new InstantCommand(() -> {ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);}),
-                new ParallelCommandGroup(
-                        generateFollowTrajectoryCommand(part5),
-                        new SequentialCommandGroup(
-                                new WaitUntilCommand(() ->
-                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getX() - finalPosePart5.getX()) < raiseElevatorDistance) &&
-                                        (Math.abs(DrivetrainSubsystem.getInstance().getPose().getY() - finalPosePart5.getY()) < raiseElevatorDistance)
-                                ),
-                                new InstantCommand(() ->{
-                                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.L4);
-                                    CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Reef);
-                                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Hold);
-                                })
-                        )
-                ),
-                new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().atSetpoint()),
-                new WaitCommand(delayBeforeShooting),
-                new InstantCommand(() -> {
-                    CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.ReefScore);
-                }),
-                new WaitCommand(delayBeforeGoingDown),
-                new InstantCommand(() -> {
-                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);
                     CoralSubsystem.getInstance().setCoralMotorState(CoralMotorState.Off);
-                    CoralSubsystem.getInstance().setCoralPistonState(CoralPistonState.Store);
-                })
-        );
+                    ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.StoreCoral);
+                }),
+                new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().getCurrentHeight().in(Units.Inches) < heightBeforeMove),
+                new GoToPose(backOffPose, 1, 2),
+                new GoToPose(backOffWithRot, 1, 2),
+                new InstantCommand(() -> {
+                   ElevatorSubsystem.getInstance().setElevatorState(ElevatorState.AlgaeRemoveMiddle);
+                    AlgaeSubsystem.getInstance().setPivotState(AlgaePivotStates.IntakeReef);
+                    AlgaeSubsystem.getInstance().setDriveState(AlgaeDriveStates.Intake);
+                }),
+                new WaitCommand(1),
+                new GoToPose(algaeIntakePose, .5, 1)
+            );
+        }
+
 
 //
 //        autoCommand = new SequentialCommandGroup(
@@ -636,7 +692,7 @@ public class AutoFactory {
         return new SequentialCommandGroup(
                 new FollowTrajectory(trajectory),
                 new ParallelRaceGroup(
-                        new GoToPose(trajectory.getFinalPose(false).get()),
+                        new GoToPose(trajectory.getFinalPose(false).get(), 5, 10),
                         new WaitCommand(1)
                 )
         );

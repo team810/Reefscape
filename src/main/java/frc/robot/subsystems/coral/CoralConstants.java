@@ -19,7 +19,7 @@ public class CoralConstants {
 
     public static final Voltage SOURCE_VOLTAGE = Voltage.ofBaseUnits(5, Volts);
     public static final Voltage REEF_SCORE_VOLTAGE = Voltage.ofBaseUnits(-8, Volts);
-    public static final Voltage REEF_SCORE_MIDDLE = Voltage.ofBaseUnits(-5, Volts);
+    public static final Voltage REEF_SCORE_MIDDLE = Voltage.ofBaseUnits(-3, Volts);
     public static final Voltage TROUGH_SCORE_VOLTAGE = Voltage.ofBaseUnits(-2, Volts);
     public static final Voltage HOLD_SCORE_VOLTAGE = Voltage.ofBaseUnits(1.5, Volts);
 

@@ -1,7 +1,10 @@
 {
     "name": "Reefscape",
     "rotations": [
-        {"axis": "x", "degrees": 90}
+        {
+            "axis": "x",
+            "degrees": 90
+        }
     ],
     "position": [
         0,
@@ -11,7 +14,10 @@
     "components": [
         {
             "zeroedRotations": [
-                {"axis" : "x", "degrees": 90}
+                {
+                    "axis": "x",
+                    "degrees": 90
+                }
             ],
             "zeroedPosition": [
                 0,
@@ -21,7 +27,10 @@
         },
         {
             "zeroedRotations": [
-                {"axis" : "x", "degrees": 90}
+                {
+                    "axis": "x",
+                    "degrees": 90
+                }
             ],
             "zeroedPosition": [
                 0,
@@ -31,7 +40,10 @@
         },
         {
             "zeroedRotations": [
-                {"axis" : "x", "degrees": 90}
+                {
+                    "axis": "x",
+                    "degrees": 90
+                }
             ],
             "zeroedPosition": [
                 0,
@@ -41,7 +53,10 @@
         },
         {
             "zeroedRotations": [
-                {"axis" : "x", "degrees": 90}
+                {
+                    "axis": "x",
+                    "degrees": 90
+                }
             ],
             "zeroedPosition": [
                 0,
@@ -51,14 +66,57 @@
         },
         {
             "zeroedRotations": [
-                {"axis" : "x", "degrees": 90},
-                {"axis" : "y", "degrees": -31}
+                {
+                    "axis": "x",
+                    "degrees": 90
+                },
+                {
+                    "axis": "y",
+                    "degrees": -31
+                }
             ],
             "zeroedPosition": [
                 -0.04,
                 -0.23,
                 -0.25
             ]
+        }
+    ],
+    "cameras": [
+        {
+            "name": "Reef four",
+            "rotations": [],
+            "position": [ 0.276, 0.0127, 0.2667],
+            "resolution": [ 1460, 1000],
+            "fov": 82
+        },
+        {
+            "name": "Reef G",
+            "rotations": [
+                {
+                    "axis": "z",
+                    "degrees": 23
+                },
+                {
+                    "axis": "y",
+                    "degrees": 50
+                }
+            ],
+            "position": [ 0.295, 0.066, 0.635 ],
+            "resolution": [ 1460, 1000 ],
+            "fov": 82
+        },
+        {
+            "name": "Source",
+            "rotations": [
+                {
+                    "axis": "y",
+                    "degrees": -50
+                }
+            ],
+            "position": [ -0.2476, -0.107, 0.9779 ],
+            "resolution": [ 1460, 1000],
+            "fov": 82
         }
     ]
 }
