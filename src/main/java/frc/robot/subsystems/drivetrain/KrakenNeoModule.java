@@ -126,6 +126,7 @@ public class KrakenNeoModule implements SwerveModuleIO{
     @Override
     public void writePeriodic() {
         targetState.optimize(new Rotation2d(getTheta().in(Radians)));
+        targetState.cosineScale(new Rotation2d(getTheta().in(Radians)));
         double velocity = targetState.speedMetersPerSecond;
         velocity = (velocity/(DrivetrainConstants.WHEEL_DIAMETER_METERS * Math.PI)) * DrivetrainConstants.DRIVE_GEAR_RATIO; // converts mps to rotations of motor per second
 

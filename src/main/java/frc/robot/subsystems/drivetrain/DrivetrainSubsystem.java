@@ -112,7 +112,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
         controlMethod = ControlMethods.off;
 
         if (DrivetrainConstants.USING_VISION) {
-            // Change the camera pose relative to robot center (x forward, y left, z up, degrees)
+            // Change the camera pose relative to robot center (x forward meters, y left meters, z up meters, roll deg, pitch deg, yaw deg)
             LimelightHelpers.setCameraPose_RobotSpace(DrivetrainConstants.LIME_LIGHT_CORAL,.276, .0127,.2667,0,0,0);
             LimelightHelpers.setCameraPose_RobotSpace(DrivetrainConstants.LIME_LIGHT_SOURCE,-.2476,.107,.9779,0,50,0);
             LimelightHelpers.setCameraPose_RobotSpace(DrivetrainConstants.LIME_LIGHT_REEFG, .295,.066,.635,0,-23,50);
@@ -167,10 +167,6 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
                             var xyStds = 1.5;
 
                             xyStds = Math.sqrt((.6 * (results.avgTagArea + .25))) - .15;
-
-//                        if (dist < 2.0) {
-//
-//                        }
 
                             if (results.tagCount >= 2) {
                                 xyStds *= .4;
@@ -279,8 +275,6 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
 
         Logger.recordOutput("Drivetrain/PositionalControl/targetPose", targetPose);
         Logger.recordOutput("Drivetrain/positionalControl", positionalControlEnabled);
-
-
     }
 
     @Override
@@ -289,7 +283,6 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
         if (Robot.isSimulation()) {
             gyroSimState.addYaw(Units.radiansToDegrees(kinematics.toChassisSpeeds(frontLeft.getCurrentState(),frontRight.getCurrentState(),backLeft.getCurrentState(),backRight.getCurrentState()).omegaRadiansPerSecond * Robot.PERIOD));
         }
-    
         frontLeft.moduleSim();
         frontRight.moduleSim();
         backLeft.moduleSim();
