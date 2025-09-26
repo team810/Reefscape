@@ -83,7 +83,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
 
         gyroSimState = gyro.getSimState();
         gyro.reset();
-
+        
         observer = new Observer(
                 frontLeft.getModuleSignals(),
                 frontRight.getModuleSignals(),
@@ -113,7 +113,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
 
         if (DrivetrainConstants.USING_VISION) {
             // Change the camera pose relative to robot center (x forward meters, y left meters, z up meters, roll deg, pitch deg, yaw deg)
-            LimelightHelpers.setCameraPose_RobotSpace(DrivetrainConstants.LIME_LIGHT_CORAL,.276, .0127,.2667,0,0,0);
+            LimelightHelpers.setCameraPose_RobotSpace(DrivetrainConstants.LIME_LIGHT_CORAL,.295 -.0127, .0127,.6223,0,0,0);
             LimelightHelpers.setCameraPose_RobotSpace(DrivetrainConstants.LIME_LIGHT_SOURCE,-.2476,.107,.9779,0,50,0);
             LimelightHelpers.setCameraPose_RobotSpace(DrivetrainConstants.LIME_LIGHT_REEFG, .295,.066,.635,0,-23,50);
         }
@@ -172,7 +172,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
                                 xyStds *= .4;
                             }
 
-                            odometry.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds,1800.0));
+                            odometry.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds,2500000));
                             odometry.addVisionMeasurement(visionPose, results.timestampSeconds);
                         }
                     }

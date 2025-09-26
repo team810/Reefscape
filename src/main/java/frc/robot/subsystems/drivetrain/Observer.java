@@ -141,7 +141,7 @@ public class Observer extends Thread {
         yawSignal = yaw;
         // The can bus is at 50% usage at 500 hz, should be able to go up to 800
         BaseStatusSignal.setUpdateFrequencyForAll(
-                500,
+                150,
                 frontLeftSignals.positionSignal,
                 frontLeftSignals.velocitySignal,
                 frontLeftSignals.accelerationSignal,

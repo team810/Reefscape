@@ -143,6 +143,7 @@ public class KrakenNeoModule implements SwerveModuleIO{
 
         double targetAngle = MathUtil.angleModulus(targetState.angle.getRadians()); // The angle is rapped from -PI to PI
         if (!DriverStation.isDisabled()) {
+            steerController.reset();
             steerAppliedVoltage = steerController.calculate(getTheta().in(Radians),targetAngle);
         }else{
             steerAppliedVoltage = 0;

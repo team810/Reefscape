@@ -65,7 +65,7 @@ public class DrivetrainConstants {
     public static final double MAX_TRACTION = (MASS * 9.8) * COEFFICIENT_OF_FRICTION; // Fn * Mu = Max traction in Newtons
     public static final double MAX_THEORETICAL_ACCELERATION = 15; // m/s^2 f=ma f/m = a
     // 5.761
-    public static final double MAX_VELOCITY = ((MAX_RPM_FOC / 60)/DRIVE_GEAR_RATIO) * (WHEEL_DIAMETER_METERS * Math.PI); // Meters per second
+    public static final double MAX_VELOCITY = ((MAX_RPM_FOC / 60)/DRIVE_GEAR_RATIO) * (WHEEL_DIAMETER_METERS * Math.PI) * .8; // Meters per second
 
     public static final double MAX_ANGULAR_VELOCITY = MAX_VELOCITY * (Math.sqrt((WHEEL_BASE_LENGTH * WHEEL_BASE_LENGTH)+(WHEEL_BASE_WIDTH * WHEEL_BASE_WIDTH)) * Math.PI); // Rotations per second
     public static final double MAX_ANGULAR_ACCELERATION = MAX_THEORETICAL_ACCELERATION * (Math.sqrt((WHEEL_BASE_LENGTH * WHEEL_BASE_LENGTH)+(WHEEL_BASE_WIDTH * WHEEL_BASE_WIDTH)) * Math.PI); // Rotations per second squared
@@ -156,7 +156,7 @@ public class DrivetrainConstants {
         CurrentLimitsConfigs currentLimitConfig = new CurrentLimitsConfigs();
         currentLimitConfig.StatorCurrentLimitEnable = true;
         currentLimitConfig.SupplyCurrentLimitEnable = true;
-        currentLimitConfig.StatorCurrentLimit = 130;
+        currentLimitConfig.StatorCurrentLimit = 80;
         currentLimitConfig.SupplyCurrentLimit = 40;
         config.CurrentLimits = currentLimitConfig;
 
@@ -253,7 +253,7 @@ public class DrivetrainConstants {
 
         config.apply(signalConfig);
         config.voltageCompensation(12);
-        config.smartCurrentLimit(30);
+        config.smartCurrentLimit(40);
         config.idleMode(SparkBaseConfig.IdleMode.kBrake);
 
         return config;
