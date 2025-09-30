@@ -174,7 +174,7 @@ public class DrivetrainConstants {
                 velocityControllerConfig.kV = 0.124146;
                 velocityControllerConfig.kA = 0;
                 velocityControllerConfig.kG = 0;
-                velocityControllerConfig.kS = .0;
+                velocityControllerConfig.kS = .0; // Fixme, need to update the ks value to make drivetrain more responsive.
                 velocityControllerConfig.kP = .0;
                 velocityControllerConfig.kI = 0;
                 velocityControllerConfig.kD = 0;

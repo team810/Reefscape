@@ -146,7 +146,7 @@ public class DrivetrainSubsystem extends AdvancedSubsystem {
                 visionResults.add(results);
             }
 
-            if (DrivetrainConstants.USING_VISION && !DriverStation.isDisabled())
+            if (DrivetrainConstants.USING_VISION)
             {
                 boolean reject = false;
                 if (results != null) {

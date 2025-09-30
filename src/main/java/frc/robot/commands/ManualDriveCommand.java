@@ -36,6 +36,10 @@ public class ManualDriveCommand extends Command {
     private final SlewRateLimiter xLimiter;
     private final SlewRateLimiter yLimiter;
 
+    private final SlewRateLimiter autoAlignLimiterX;
+    private final SlewRateLimiter autoAlignLimiterY;
+    private final SlewRateLimiter autoAlignLimiterOmega;
+
     private final SlewRateLimiter velocityLimiter;
 
     private final PIDController xAlignController;
@@ -98,11 +102,14 @@ public class ManualDriveCommand extends Command {
 
         velocityLimiter = new SlewRateLimiter(8);
 
+        autoAlignLimiterX = new SlewRateLimiter(4,-100, 0);
+        autoAlignLimiterY = new SlewRateLimiter(4,-100, 0);
+        autoAlignLimiterOmega = new SlewRateLimiter(6,-100, 0);
         xAlignController = new PIDController(3.5, 0, 0);
         yAlignController = new PIDController(3.5, 0, 0);
         xAlignController.setTolerance(.02);
         yAlignController.setTolerance(.02);
-        omegaAlignController = new PIDController(7, 0, 0);
+        omegaAlignController = new PIDController(4, 0, 0);
         omegaAlignController.enableContinuousInput(-Math.PI, Math.PI);
         omegaAlignController.setTolerance(Math.toRadians(1));
 
@@ -300,6 +307,8 @@ public class ManualDriveCommand extends Command {
                 // Reef align
                 Pose2d currentPose = DrivetrainSubsystem.getInstance().getPose();
                 if (!alignLastTick) {
+                    autoAlignLimiterX.reset(0);
+                    autoAlignLimiterY.reset(0);
                     targetPose = currentPose.nearest(reefSections);
                     if (targetPose == F) {
                         System.out.println("Front");
@@ -343,10 +352,22 @@ public class ManualDriveCommand extends Command {
                     }
                     alignLastTick = true;
                 }
+                double clamp = 3;
+                double rotationalError = Math.abs(MathUtil.angleModulus((targetPose.getRotation().getRadians() - currentPose.getRotation().getRadians())));
+                System.out.println( "Rotation Error:" + rotationalError + "\n");
+                if (MathUtil.isNear(0, rotationalError, .02)) {
+                    clamp = 4;
+                }else{
+                    clamp = (clamp * .2) / (rotationalError * rotationalError);
+                }
+                System.out.print("Clamped Value: " + clamp + "\n\n");
 
-                double xOutput = xAlignController.calculate(currentPose.getX(), targetPose.getX());
-                double yOutput = yAlignController.calculate(currentPose.getY(), targetPose.getY());
+                double xOutput = MathUtil.clamp(xAlignController.calculate(currentPose.getX(), targetPose.getX()), -clamp, clamp);
+                double yOutput = MathUtil.clamp(yAlignController.calculate(currentPose.getY(), targetPose.getY()), -clamp, clamp);
                 double omegaOutput = omegaAlignController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
+                xOutput = autoAlignLimiterX.calculate(xOutput);
+                yOutput = autoAlignLimiterY.calculate(yOutput);
+//                omegaOutput = autoAlignLimiterOmega.calculate(omegaOutput);
 
                 DrivetrainSubsystem.getInstance().setTargetPoseLog(targetPose, targetPose.getX(), targetPose.getY(), targetPose.getRotation().getRadians(), xOutput, yOutput, omegaOutput, xAlignController.atSetpoint(), yAlignController.atSetpoint(), omegaAlignController.atSetpoint());
                 DrivetrainSubsystem.getInstance().setPositionalControl(true);
