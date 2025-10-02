@@ -11,7 +11,7 @@ public class FieldConstants {
 
     public static class BlueReef {
 
-        public static final Pose2d F = new Pose2d(3.2094268798828125,4.015262603759766, new Rotation2d(0));
+        public static final Pose2d F = new Pose2d(3.2094268798828125,4.055262603759766, new Rotation2d(0));
         public static final Pose2d F_LEFT = new Pose2d(2.9,3.98, new Rotation2d(0));
         public static final Pose2d F_RIGHT = new Pose2d(2.8 , 3.65 , new Rotation2d(0));
 
@@ -42,7 +42,7 @@ public class FieldConstants {
         public static final Distance SOURCE_VERTICAL_OFFSET = Inches.of(17.625 + 4);
 
         public static final Pose2d LEFT_SOURCE = new Pose2d(1.02, 6.85, Rotation2d.fromDegrees(126));
-        public static final Pose2d RIGHT_SOURCE = new Pose2d(1.2557573318481445  , .96  , Rotation2d.fromDegrees(-126));
+        public static final Pose2d RIGHT_SOURCE = new Pose2d(1.271351933479309       , 0.9459158778190613      , Rotation2d.fromDegrees(-126));
 //        public static final Pose2d LEFT_SOURCE = transform(LEFT_SOURCE_TAG, SOURCE_HORIZONTAL_OFFSET, SOURCE_VERTICAL_OFFSET);
 //        public static final Pose2d RIGHT_SOURCE = transform(RIGHT_SOURCE_TAG, SOURCE_HORIZONTAL_OFFSET, SOURCE_VERTICAL_OFFSET);
 
@@ -55,7 +55,7 @@ public class FieldConstants {
         public static final Distance DEPTH_OFFSET = Inches.of(17.625 + 8); // The 17.625 is the size of the robot and the 14 is the distance back from the reef, both are in inches
 
         // This would be if these are april tag locations
-        public static final Pose2d CENTER_AB = new Pose2d(3.6576, 4.0259, Rotation2d.fromDegrees(0));
+        public static final Pose2d CENTER_AB = new Pose2d(3.6576, 4.009, Rotation2d.fromDegrees(0));
         public static final Pose2d CENTER_CD = new Pose2d(4.0739,3.3063, Rotation2d.fromDegrees(60));
         public static final Pose2d CENTER_EF = new Pose2d(4.90474,3.3063, Rotation2d.fromDegrees(120));
         public static final Pose2d CENTER_GH = new Pose2d(5.321,4.0259, Rotation2d.fromDegrees(180));
