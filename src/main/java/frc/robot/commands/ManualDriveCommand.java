@@ -352,15 +352,14 @@ public class ManualDriveCommand extends Command {
                     }
                     alignLastTick = true;
                 }
+
                 double clamp = 3;
                 double rotationalError = Math.abs(MathUtil.angleModulus((targetPose.getRotation().getRadians() - currentPose.getRotation().getRadians())));
-                System.out.println( "Rotation Error:" + rotationalError + "\n");
                 if (MathUtil.isNear(0, rotationalError, .02)) {
                     clamp = 4;
                 }else{
                     clamp = (clamp * .2) / (rotationalError * rotationalError);
                 }
-                System.out.print("Clamped Value: " + clamp + "\n\n");
 
                 double xOutput = MathUtil.clamp(xAlignController.calculate(currentPose.getX(), targetPose.getX()), -clamp, clamp);
                 double yOutput = MathUtil.clamp(yAlignController.calculate(currentPose.getY(), targetPose.getY()), -clamp, clamp);
@@ -392,9 +391,19 @@ public class ManualDriveCommand extends Command {
                     targetPose = RIGHT_SOURCE;
                 }
 
-                double xOutput = xAlignController.calculate(currentPose.getX(), targetPose.getX());
-                double yOutput = yAlignController.calculate(currentPose.getY(), targetPose.getY());
+                double clamp = 3;
+                double rotationalError = Math.abs(MathUtil.angleModulus((targetPose.getRotation().getRadians() - currentPose.getRotation().getRadians())));
+                if (MathUtil.isNear(0, rotationalError, .02)) {
+                    clamp = 4;
+                }else{
+                    clamp = (clamp * .2) / (rotationalError * rotationalError);
+                }
+
+                double xOutput = MathUtil.clamp(xAlignController.calculate(currentPose.getX(), targetPose.getX()), -clamp, clamp);
+                double yOutput = MathUtil.clamp(yAlignController.calculate(currentPose.getY(), targetPose.getY()), -clamp, clamp);
                 double omegaOutput = omegaAlignController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
+                xOutput = autoAlignLimiterX.calculate(xOutput);
+                yOutput = autoAlignLimiterY.calculate(yOutput);
 
                 if ((MathUtil.applyDeadband(xOutput, .1) == 0) & (MathUtil.applyDeadband(yOutput,.1) == 0) & (MathUtil.applyDeadband(omegaOutput, .4) == 0) & ElevatorSubsystem.getInstance().atSetpoint() & ElevatorSubsystem.getInstance().getElevatorState() == ElevatorState.Source) {
                     LedUtil.getInstance().setState(LedState.GOOD);
@@ -406,7 +415,6 @@ public class ManualDriveCommand extends Command {
                 DrivetrainSubsystem.getInstance().setPositionalControl(true);
 
                 ChassisSpeeds speeds = new ChassisSpeeds(xOutput, yOutput, omegaOutput);
-                //            speeds = limitSpeeds(speeds);
 
                 DrivetrainSubsystem.getInstance().setVelocityFOC(speeds);
                 DrivetrainSubsystem.getInstance().setControlMode(DrivetrainSubsystem.ControlMethods.VelocityFOC);
